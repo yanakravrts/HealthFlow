@@ -20,11 +20,11 @@ class ResponseFromDB:
 
 class DBClient:
     def __init__(self, config):
-        self.connection = None
-        self.host_name = config.host_name
-        self.user_name = config.user_name
-        self.user_password = config.user_password
-        self.database_name = config.database_name
+         self.connection = None
+         self.host_name = config['host']
+         self.user_name = config['user']
+         self.user_password = config['password']
+         self.database_name = config['dbname']
 
     def connect(self):
 
