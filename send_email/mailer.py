@@ -52,3 +52,5 @@ async def send_email(email: EmailSchema):
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
     finally:
         smtp_server.quit()
+
+
