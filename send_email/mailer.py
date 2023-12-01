@@ -7,7 +7,7 @@ import random
 
 app = FastAPI()
 # verification code
-verification_codes = {}  # Store verification codes and associated email addresses
+verification_codes = {}
 
 
 def generate_verification_code():
