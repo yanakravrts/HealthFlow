@@ -6,7 +6,7 @@ from email.mime.text import MIMEText
 import random
 
 app = FastAPI()
-
+# verification code
 verification_codes = {}  # Store verification codes and associated email addresses
 
 
