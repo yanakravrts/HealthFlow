@@ -62,3 +62,4 @@ async def check_email(verification_code: str, receiver_email: EmailStr):
     else:
         raise HTTPException(status_code=400, detail="Invalid verification code or email")
 
+
