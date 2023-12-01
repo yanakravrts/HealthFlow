@@ -5,11 +5,14 @@ from config import postgres_config
 import datetime
 from client_db import DBClient
 from tables import UserTable
+
+
 @dataclass
 class ExtractorError(Exception):
     message: str = ''
-
     def __post_init__(self):
+        """
+        """
         super().__init__(self.message)
     connection = None
 
@@ -33,6 +36,7 @@ class ExtractorError(Exception):
             return results
         except psycopg2.Error as e:
             raise ExtractorError(f"Failed to execute the query: {e}")
+        
 
 class Extractor:
     def __init__(self):
@@ -63,7 +67,7 @@ class Extractor:
     def get_user_older_than(self, year: int) -> List[dict]:
         all_users = self.extract_data("SELECT * FROM \"user\"")
         cutoff_birth_date = datetime.date.today() - datetime.timedelta(days=year*365.25)
-        filtered_users = [user for user in all_users if self.parse_birth_date(user['birth_day']) < cutoff_birth_date]
+        filtered_users = [user for user in all_users if self.parse_birth_date(user[UserTable.BIRTH_DAY]) < cutoff_birth_date]
         return filtered_users
   
     
