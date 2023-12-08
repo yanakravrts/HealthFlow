@@ -4,21 +4,20 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import random
+from cachetools import TTLCache
 
 app = FastAPI()
-# verification code
-verification_codes = {}
 
+
+verification_codes = TTLCache(maxsize=100, ttl=300)
 
 def generate_verification_code():
     return str(random.randint(100000, 999999))
-
 
 class EmailSchema(BaseModel):
     receiver_email: EmailStr
     subject: str
     body: str
-
 
 @app.post("/send_email/")
 async def send_email(email: EmailSchema):
@@ -53,7 +52,6 @@ async def send_email(email: EmailSchema):
     finally:
         smtp_server.quit()
 
-
 @app.post("/check_email/")
 async def check_email(verification_code: str, receiver_email: EmailStr):
     stored_code = verification_codes.get(receiver_email)
@@ -61,5 +59,3 @@ async def check_email(verification_code: str, receiver_email: EmailStr):
         return {"message": "Verification successful"}
     else:
         raise HTTPException(status_code=400, detail="Invalid verification code or email")
-
-
