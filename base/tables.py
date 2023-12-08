@@ -50,6 +50,7 @@ class BloodNeedTable:
     ID="id"
     BANK_ID="bank_id"
     TIMESTAMP="timestamp"
+    BLOOD_TYPE="blood_type"
 
 
 class FacilityStatusTable:
@@ -106,6 +107,21 @@ class VisitStatusTable:
     TABLE="visit_status"
     ID="id"
     VALUE="value"
+
+
+class ArticlesTable:
+    TABLE="article"
+    TITLE="title"
+    PHOTO="photo"
+    LINK="link"
+
+
+class UserPasswordHash:
+    TABLE = "user_password"
+    ID = "id"
+    USER_ID = "user_id"
+    PASSWORD_HASH = "password_hash"    
+    
     
 
 

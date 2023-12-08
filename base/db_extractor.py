@@ -5,7 +5,7 @@ from config import postgres_config
 import datetime
 from client_db import DBClient
 from tables import UserTable
-
+import tables
 
 @dataclass
 class ExtractorError(Exception):
@@ -123,7 +123,8 @@ class Extractor:
             - latitude (float):The latitude of the target location
             - longitude (float): The longitude of the target location
         """
-        query = "SELECT * FROM \"laboratory\" WHERE calculate_distance(latitude, longitude, %s, %s) <= 100"
+        #query = "SELECT * FROM \"laboratory\" WHERE calculate_distance(latitude, longitude, %s, %s) <= 100"
+        query = f"SELECT * FROM {tables.LaboratoryTable} WHERE calculate_distance(latitude, longitude, %s, %s) <= 100"
         params = (latitude, longitude)
         return self.extract_data(query, params)
     
@@ -147,20 +148,79 @@ class Extractor:
             - year (int): number of tears to consider
 
         Returns:
-             - list od sictionaries: as user older than the number of years
+             - list of dictionaries: as user older than the number of years
         """
         all_users = self.extract_data("SELECT * FROM \"user\"")
         cutoff_birth_date = datetime.date.today() - datetime.timedelta(days=year*365.25)
         filtered_users = [user for user in all_users if self.parse_birth_date(user[UserTable.BIRTH_DAY]) < cutoff_birth_date]
         return filtered_users
-  
     
+    def user_exist_by_email(self,email:str)->bool:
+        """
+        Check if user exist by email
 
+        Args:
+            - email(str): the email addres to check 
+
+        Returns:
+               - bool: True - user exists, False - doesn't exist 
+        """
+        query=f"SELECT * FROM {tables.UserTable} WHERE {tables.UserTable.EMAIL} = %s"
+        params=(email,)
+        result=self.extract_data(query,params)
+        return result is not None and len(result)>0
+      
+    def active_blood_needs(self,blood_type:float)->List[dict]:
+        """
+        Get active blood needs for a specific blood types
+
+        Args:
+            - blood_type (str): The blood type to search for
+
+        Returns:
+            - list of dictionaries: Active blood needs with the specified blood type
+        """
+        query = f"SELECT {tables.BloodBankTable.NAME}, {tables.BloodBankTable.ADDRESS} FROM {tables.BloodNeedTable} JOIN {tables.BloodBankTable} ON {tables.BloodBankTable.ID} = {tables.BloodNeedTable.BANK_ID} WHERE {tables.BloodNeedTable.BLOOD_TYPE} = %s {tables.BloodNeedTable.TIMESTAMP}::DATE >= CURRENT_DATE()"
+        params = (blood_type,)
+        return self.extract_data(query, params)
+
+    def analysis_results(self,user_id:int)->List[dict]:
+        """
+        Get user's analysis results by id 
+
+        Args:
+            - user_id(int): The ID of the user to retrieve
+
+        Returns:
+               - list of dictionaries: User analysis info    
+        """
+        query = f"SELECT {tables.UserTable.NAME}, {tables.UserAnalysisTable.ANALYSIS_ID}, {tables.UserAnalysisTable.ACTUAL_VALUE}, {tables.UserAnalysisTable.TIMESTAMP} FROM {tables.UserTable} JOIN {tables.UserAnalysisTable} ON {tables.UserTable.ID} = {tables.UserAnalysisTable.USER_ID} WHERE {tables.UserTable.ID} = %s"
+        params = (user_id,)
+        return self.extract_data(query, params)
+
+    def lab_coordinates(self,lab_id:int)->List[dict]:
+        """
+        Get lab's coordanates by id 
+
+        Args: 
+            - lad_id(int): the id of lab to retrieve
+
+        Returns:
+               - latitude and longitude      
+        """
+        query = f"SELECT {tables.LaboratoryTable.LATITUDE}, {tables.LaboratoryTable.LONGITUDE} FROM {tables.LaboratoryTable} WHERE {tables.LaboratoryTable.ID} = %s "
+        params = (lab_id,)
+        return self.extract_data(query,params)
+
+print(Extractor().lab_coordinates(1))
+print(Extractor().analysis_results(1))
+blood_type="2+"
+print(Extractor().active_blood_needs(blood_type))
+#output user_exist_by_email
+print(Extractor().user_exist_by_email("olgam@gmail.com"))
 #output get_user_by_id 
 print(*Extractor().get_user_by_id(1) if Extractor().get_user_by_id(1) else "Failed to retrieve user.")
-
 # Output for get_user_older_than
 print(*Extractor().get_user_older_than(18) if Extractor().get_user_older_than(18) else "Failed to retrieve user.")
-
 
 
