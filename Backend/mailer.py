@@ -19,7 +19,7 @@ class EmailSchema(BaseModel):
     subject: str
     body: str
 
-@app.post("/send_email/")
+@app.post("/Backend/")
 async def send_email(email: EmailSchema):
     smtp_server = smtplib.SMTP("smtp.gmail.com", 587)
     smtp_server.starttls()
