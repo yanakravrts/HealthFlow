@@ -51,18 +51,22 @@ class EmailService:
         finally:
             smtp_server.quit()
 
+
 class EmailSchema(BaseModel):
     receiver_email: EmailStr
     subject: str
     body: str
 
+
 app = FastAPI()
 email_service = EmailService()
+
 
 @app.post("/send_email/")
 async def send_email(email: EmailSchema):
     logging.info(f"Sending email to {email.receiver_email}")
     return email_service.send_email(email.receiver_email, email.subject, email.body)
+
 
 @app.post("/check_email/")
 async def check_email(verification_code: str, receiver_email: EmailStr):
