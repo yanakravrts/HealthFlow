@@ -49,7 +49,6 @@ class EmailSchema(BaseModel):
 app = FastAPI()
 email_service = EmailService()
 
-
 @app.post("/send_email/")
 async def send_email(email: EmailSchema):
     return email_service.send_email(email.receiver_email, email.subject, email.body)
