@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Form, Query
 from fastapi.responses import JSONResponse, RedirectResponse
-from pydantic import BaseModel, EmailStr, HttpUrl
+from pydantic import BaseModel, EmailStr
 from typing import List
 from datetime import date
 from logger_file import logger
