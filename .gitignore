@@ -1,3 +1,3 @@
-.venv
-__pycacche__
-
+Backend/.venv
+Backend/__pycache__
+base/__pycache__
