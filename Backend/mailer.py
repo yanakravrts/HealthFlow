@@ -5,15 +5,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import random
 from cachetools import TTLCache
-import logging
-
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(levelname)s - %(message)s',
-    handlers=[
-        logging.StreamHandler()
-    ]
-)
+from logger_file import logger
+from error import Error
 
 class EmailService:
     def __init__(self):
@@ -46,12 +39,33 @@ class EmailService:
 
             return {"message": "Email sent successfully"}
         except Exception as e:
-            logging.error(f"An error occurred: {str(e)}")
+            logger.error(f"An error occurred: {str(e)}")
             raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
         finally:
             smtp_server.quit()
 
+class EmailSchema(BaseModel):
+    receiver_email: EmailStr
+    subject: str
+    body: str
 
+app = FastAPI()
+email_service = EmailService()
+
+@app.post("/send_email/")
+async def send_email(email: EmailSchema):
+    logger.info(f"Sending email to {email.receiver_email}")
+    return email_service.send_email(email.receiver_email, email.subject, email.body)
+
+@app.post("/check_email/")
+async def check_email(verification_code: str, receiver_email: EmailStr):
+    stored_code = email_service.verification_codes.get(receiver_email)
+    if stored_code and stored_code == verification_code:
+        logger.info(f"Verification successful for {receiver_email}")
+        return {"message": "Verification successful"}
+    else:
+        logger.error(f"Invalid verification code or email for {receiver_email}")
+        raise HTTPException(status_code=400, detail="Invalid verification code or email")
 class EmailSchema(BaseModel):
     receiver_email: EmailStr
     subject: str
