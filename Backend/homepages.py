@@ -1,13 +1,14 @@
 from fastapi import FastAPI, Form, Query
 from fastapi.responses import JSONResponse, RedirectResponse
-from pydantic import BaseModel, EmailStr, HttpUrl
+from pydantic import BaseModel, EmailStr
 from typing import List
 from datetime import date
 from logger_file import logger
 from error import Error
-from models import ArticlePage, Profile, Article, HelpResponse, AboutAs, ProfileName, BloodDonationCenters
+from models import ArticlePage, Profile, Article, HelpResponse, AboutAs, ProfileName, BloodDonationCenters, Event
 from data import blood_donation_data, profiles, articles, articles1
 import random
+from datetime import datetime
 
 app = FastAPI()
 error = Error()
@@ -167,3 +168,20 @@ async def go_to_external_link(article_id: int):
         return error.error_500(e, "Internal Server Error")
     
 
+@app.get("/calendar")
+async def get_calendar():
+    try:
+        current_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        return JSONResponse(content={"current_datetime": current_datetime})
+    except Exception as e:
+        return error.error_500(e, "Internal Server Error")
+    
+
+@app.post("/calendar/add_event", response_model= Event)
+async def add_event(event: Event):
+    try:
+        return event
+    except ValueError:
+        return error.error_422("The data is not correct")
+    except Exception as e:
+        return error.error_500(e, "Internal Server Error")

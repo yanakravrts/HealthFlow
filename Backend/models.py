@@ -1,6 +1,12 @@
 from pydantic import BaseModel, EmailStr, HttpUrl
 from datetime import date
 from typing import List
+from datetime import datetime
+
+class Event(BaseModel):
+    title: str
+    city: str
+    date_time: datetime
 
 class ArticlePage(BaseModel):
     id: int
