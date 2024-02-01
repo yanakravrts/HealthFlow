@@ -13,6 +13,7 @@ from datetime import datetime
 app = FastAPI()
 error = Error()
 
+
 @app.get("/burger", response_model=ProfileName)
 async def burger(profile_id: str):
     try:
@@ -25,6 +26,7 @@ async def burger(profile_id: str):
     except Exception as e:
         return error.error_500(e, "Internal Server Error")
     
+
 @app.post("/burger/change_profile", response_model=Profile)
 async def change_profile(
     profile_id: str,
