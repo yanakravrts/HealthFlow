@@ -4,7 +4,7 @@ import json
 from models import Point
 from logger_file import logger
 from fastapi.responses import JSONResponse
-from Base.supa_extractor import supabase_client
+from base.supa_extractor import supabase_client
 # from error import Error
 
 # error = Error()
