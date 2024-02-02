@@ -19,26 +19,10 @@ class ExtractData:
             .execute()
         return data
     
-    # def get_lab_coordinate(self):
-    #     data = supabase_client.supabase.table("laboratory")\
-    #     .select("id","name","latitude","longitude").execute()
-    #     return data
-
-    
-    # def get_lab_coordinate(self):
-    #     region = input("Введіть назву області: ")
-    #     data = supabase_client.supabase.table("laboratory")\
-    #         .select("id", "name", "latitude", "longitude")\
-    #         .eq("region", region).execute()
-    #     return data
-    
 
 
 extractor = ExtractData(supabase_client)
 
-# data = extractor.get_lab_coordinate().data
-# print(len(data))
-# print(data)
 """user_data = extractor.get_user_by_id(1)
 print(user_data)"""
 
