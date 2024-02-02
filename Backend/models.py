@@ -3,6 +3,12 @@ from datetime import date
 from typing import List
 from datetime import datetime
 
+class Point(BaseModel):
+    id: int
+    name: str
+    latitude: float
+    longitude: float
+    
 class Event(BaseModel):
     title: str
     city: str
