@@ -30,20 +30,14 @@ async def upload_file(request: Request):
         return {"message": "Error uploading file to Supabase"}
     
 
-# @app.get("/download/{file_name}")
-# async def download_file(file_name: str):
-#     # Отримуємо вміст файлу з Supabase
-#     response = supabase.storage.from_("file").download(file_name)
-#     # Повертаємо вміст файлу у відповіді
-#     return Response(content=response, media_type="application/octet-stream", headers={"Content-Disposition": f"attachment; filename={file_name}"})
-
 @app.get("/download/{file_name}")
 async def download_file(file_name: str):
-    # Отримуємо URL файлу з Supabase
-    response = supabase.storage.from_("file").create_signed_url(file_name, expires_in=3600)
+    response = supabase.storage.from_("file").download(file_name)
+    return Response(content=response, media_type="application/octet-stream", headers={"Content-Disposition": f"attachment; filename={file_name}"})
 
-    if response.get("error"):
-        return response, 500
-
-    # Повертаємо URL файлу у відповіді
-    return {"file_url": response["signedURL"]}
+# @app.get("/download/{file_name}")
+# async def download_file(file_name: str):
+#     response = supabase.storage.from_("file").create_signed_url(file_name, expires_in=3600)
+#     if response.get("error"):
+#         return response, 500
+#     return {"file_url": response["signedURL"]}
