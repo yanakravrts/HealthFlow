@@ -6,8 +6,8 @@ from models import Point
 from logger_file import logger
 from fastapi.responses import JSONResponse
 import sys
-sys.path.append(r'base\supa_extractor.py')  
-from supa_extractor import supabase_client
+sys.path.append(r'base\supa_client.py')  
+from supa_client import supabase_client
 from error import Error
 
 error = Error()
