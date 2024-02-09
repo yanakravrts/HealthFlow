@@ -1,16 +1,18 @@
 from dotenv import load_dotenv
-load_dotenv()
-from fastapi import FastAPI, Request, HTTPException, Response
 import os
 from supabase import create_client
+import io
+import pdfplumber
+from fastapi import FastAPI, Request, Response
 
 app = FastAPI()
+
+load_dotenv()
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
-
 
 @app.post("/upload/")
 async def upload_file(request: Request):
@@ -22,22 +24,32 @@ async def upload_file(request: Request):
     file = form_data['file']
     contents = await file.read()
     
+    # Завантажити файл у сховище Supabase
     response = supabase.storage.from_("file").upload(file.filename, contents)
     
-    if response.status_code == 200:
-        return {"message": "File uploaded successfully"}
-    else:
+    if response.status_code != 200:
         return {"message": "Error uploading file to Supabase"}
     
+    return {"message": "File uploaded successfully"}
 
-@app.get("/download/{file_name}")
-async def download_file(file_name: str):
+@app.get("/get_file/{file_name}")
+async def get_file(file_name: str):
+    # Отримати файл у байтах зі сховища Supabase
     response = supabase.storage.from_("file").download(file_name)
-    return Response(content=response, media_type="application/octet-stream", headers={"Content-Disposition": f"attachment; filename={file_name}"})
+    
+    if response.status_code != 200:
+        return {"message": "Error downloading file from Supabase"}
+    
+    file_content = response.content
+    
+    # Дістати текст з PDF-файлу
+    text = await extract_text_from_pdf(file_content)
+    
+    return {"text": text}
 
-# @app.get("/download/{file_name}")
-# async def download_file(file_name: str):
-#     response = supabase.storage.from_("file").create_signed_url(file_name, expires_in=3600)
-#     if response.get("error"):
-#         return response, 500
-#     return {"file_url": response["signedURL"]}
+async def extract_text_from_pdf(file_content: bytes) -> str:
+    with pdfplumber.open(io.BytesIO(file_content)) as pdf:
+        text = ""
+        for page in pdf.pages:
+            text += page.extract_text()
+    return text
