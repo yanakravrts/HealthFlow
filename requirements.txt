@@ -5,4 +5,5 @@ cachetools==5.3.2
 python-multipart==0.0.6
 pydantic[email]==2.5.3
 pydantic-settings==2.1.0
-
+supabase==2.3.4
+pdfplumber==0.10.3
