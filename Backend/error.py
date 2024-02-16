@@ -1,4 +1,3 @@
-
 from fastapi.responses import JSONResponse
 from logger_file import logger
 
@@ -19,3 +18,9 @@ class Error:
     def error_404(message: str):
         logger.warning(message)
         return JSONResponse(content={"message": message}, status_code=404)
+    
+
+    @staticmethod
+    def error_400(message: str):
+        logger.warning(message)
+        return JSONResponse(content={"message": message}, status_code=400)

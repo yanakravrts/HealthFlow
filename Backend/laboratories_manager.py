@@ -1,4 +1,7 @@
 import math
+from error import Error
+
+error = Error()
 
 def haversine(lat1, lon1, lat2, lon2):
     """
@@ -35,6 +38,12 @@ def points_in_radius(center_lat, center_lon, radius, lab_data):
     Returns:
     - List of points (laboratories) within the specified radius from the center point.
     """
+    if radius < 0:
+        return Error.error_400(f"Radius cannot be negative")
+
+    # if radius < 0:
+    # raise ValueError("Radius cannot be negative")
+
     points_in_radius = []
     for point in lab_data:
         latitude, longitude = point.latitude, point.longitude

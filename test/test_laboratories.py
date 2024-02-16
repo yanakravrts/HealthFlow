@@ -1,6 +1,7 @@
 import sys
-sys.path.append('/Users/yanakravets/HealthFlow/Backend')
-from laboratories import points_in_radius, Point
+sys.path.append(r'../Backend')
+from laboratories import Point
+from laboratories_manager import points_in_radius
 import unittest
 
 class TestPointInRadius(unittest.TestCase):
