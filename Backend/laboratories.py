@@ -6,13 +6,14 @@ from models import Point
 from logger_file import logger
 from fastapi.responses import JSONResponse
 import sys
-sys.path.append(r'base\supa_extractor.py')  
-from supa_extractor import supabase_client
-from error import Error
+sys.path.append('/Users/yanakravets/HealthFlow/base')
+from supa_client import supabase_client
 
+from error import Error
 error = Error()
 
 app = FastAPI()
+
 
 
 @app.post("/laboratories")
@@ -90,6 +91,8 @@ def haversine(lat1, lon1, lat2, lon2):
 
 def points_in_radius(center_lat, center_lon, radius, lab_data):
     points_in_radius = []
+    if radius < 0:
+        raise ValueError("Radius cannot be negative")
     for point in lab_data:
         latitude, longitude = point.latitude, point.longitude
         distance = haversine(center_lat, center_lon, latitude, longitude)
