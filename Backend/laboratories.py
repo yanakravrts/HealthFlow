@@ -5,7 +5,7 @@ from models import Point
 from logger_file import logger
 import sys
 from laboratories_manager import points_in_radius
-sys.path.append(r'C:\code\HealthFlow\base')  # тут потрібно вказати шлях до папки base на вашому комп'ютері
+sys.path.append(r'..\base') 
 from supa_client import supabase_client
 from error import Error
 
