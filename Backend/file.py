@@ -6,6 +6,7 @@ import pdfplumber
 from logger_file import logger
 from error import Error
 from fastapi import FastAPI, Request, Response
+from file_manager import extract_text_from_pdf
 
 app = FastAPI()
 error = Error()
@@ -17,8 +18,18 @@ SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+
 @app.post("/upload/")
 async def upload_file(request: Request):
+    """
+    Handles the upload of a file to Supabase storage.
+
+    Arguments:
+    - request: A FastAPI Request object representing the incoming request.
+
+    Returns:
+    - dictionary with the message "File uploaded successfully".
+    """
     try:
         form_data = await request.form()
         
@@ -38,8 +49,18 @@ async def upload_file(request: Request):
     except Exception as e:
         return error.error_500(e, "An error occurred while uploading file")
 
+
 @app.get("/get_file/{file_name}")
 async def get_file(file_name: str):
+    """
+    Retrieves a file from Supabase storage and extracts text from a PDF file if available.
+
+    Arguments:
+    - file_name: A string representing the name of the file to retrieve.
+
+    Returns:
+    - dictionary with the extracted text from the PDF file.
+    """
     try:
         response = supabase.storage.from_("file").download(file_name)
         
@@ -54,12 +75,4 @@ async def get_file(file_name: str):
         return {"text": text}
     except Exception as e:
         return error.error_500(e, "An error occurred while downloading file")
-
-
-async def extract_text_from_pdf(file_content: bytes) -> str:
-    with pdfplumber.open(io.BytesIO(file_content)) as pdf:
-        text = ""
-        for page in pdf.pages:
-            text += page.extract_text(layout = True)
-    return text
 
