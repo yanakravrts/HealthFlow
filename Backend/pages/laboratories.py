@@ -1,16 +1,15 @@
 from fastapi import FastAPI, Query
 import json
 from time import time
-from models import Point
-from logger_file import logger
-import sys
-from laboratories_manager import points_in_radius
-sys.path.append(r'..\base') 
-from supa_client import supabase_client
-from error import Error
+# import sys
+# sys.path.append(r'..\base')
+# sys.path.append(r'..\managers')
+# sys.path.append(r'..\other')
+from managers.geo_manager import points_in_radius
+from base.supa_client import supabase_client
+from other.models import Point
+from other.error import Error
 
-
-from error import Error
 error = Error()
 
 app = FastAPI()
@@ -41,6 +40,10 @@ Returns:
 """
     start = time()
     try:
+
+        if radius < 0:
+            return Error.error_400(f"Radius cannot be negative")
+
         response = supabase_client.supabase.table("laboratory") \
             .select("id", "name", "latitude", "longitude") \
             .eq("region", region).execute()

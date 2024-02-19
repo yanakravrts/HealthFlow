@@ -1,7 +1,8 @@
-import sys
-sys.path.append(r'../Backend')
-from laboratories import Point
-from laboratories_manager import points_in_radius
+# import sys
+# sys.path.append(r'..\Backend\other')
+# sys.path.append(r'..\Backend\pages')
+from pages.laboratories import Point
+from managers.geo_manager import points_in_radius
 import unittest
 
 class TestPointInRadius(unittest.TestCase):
@@ -21,10 +22,6 @@ class TestPointInRadius(unittest.TestCase):
         result = points_in_radius(self.central_lat, self.central_lon, radius, self.lab_data)
         self.assertEqual(result, [])
     
-    def test_radius_negative(self):
-        radius = -25
-        with self.assertRaises(ValueError):
-            points_in_radius(self.central_lat, self.central_lon, radius, self.lab_data)
 
     def test_all_points_in_radius(self):
         radius = 10000

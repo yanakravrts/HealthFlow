@@ -1,12 +1,15 @@
 from fastapi import FastAPI, Form, Query
 from fastapi.responses import JSONResponse, RedirectResponse
-from pydantic import BaseModel, EmailStr
+from pydantic import EmailStr
 from typing import List
 from datetime import date
-from logger_file import logger
-from error import Error
-from models import ArticlePage, Profile, Article, HelpResponse, AboutAs, ProfileName, BloodDonationCenters, Event
-from data import blood_donation_data, profiles, articles, articles1
+# import sys
+# sys.path.append(r'..\other')
+# sys.path.append(r'..\managers')
+from other.logger_file import logger
+from other.error import Error
+from other.models import Profile, Article, HelpResponse, AboutAs, ProfileName, BloodDonationCenters, Event
+from other.data import blood_donation_data, profiles, articles, articles1
 import random
 from datetime import datetime
 

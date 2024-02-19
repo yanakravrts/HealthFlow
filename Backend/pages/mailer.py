@@ -5,8 +5,10 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import random
 from cachetools import TTLCache
-from logger_file import logger
-from error import Error
+# import sys
+# sys.path.append(r'..\other')
+from other.logger_file import logger
+from other.error import Error
 from fastapi.responses import JSONResponse
 
 class EmailService:
