@@ -1,12 +1,13 @@
 from dotenv import load_dotenv
 import os
 from supabase import create_client
-import io
-import pdfplumber
-from logger_file import logger
-from error import Error
-from fastapi import FastAPI, Request, Response
-from file_manager import extract_text_from_pdf
+# import sys
+# sys.path.append(r'..\other')
+# sys.path.append(r'..\managers')
+from other.logger_file import logger
+from other.error import Error
+from fastapi import FastAPI, Request
+from managers.file_manager import extract_text_from_pdf
 
 app = FastAPI()
 error = Error()

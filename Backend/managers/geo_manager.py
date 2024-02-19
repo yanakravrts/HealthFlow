@@ -1,5 +1,7 @@
 import math
-from error import Error
+# import sys
+# sys.path.append(r'..\other')
+from other.error import Error
 
 error = Error()
 
@@ -33,17 +35,11 @@ def points_in_radius(center_lat, center_lon, radius, lab_data):
     - center_lat: Latitude of the center point in degrees.
     - center_lon: Longitude of the center point in degrees.
     - radius: Radius in kilometers.
-    - lab_data: List of points (laboratories) to check for proximity.
+    - lab_data: List of points to check for proximity.
 
     Returns:
-    - List of points (laboratories) within the specified radius from the center point.
+    - List of points within the specified radius from the center point.
     """
-    if radius < 0:
-        return Error.error_400(f"Radius cannot be negative")
-
-    # if radius < 0:
-    # raise ValueError("Radius cannot be negative")
-
     points_in_radius = []
     for point in lab_data:
         latitude, longitude = point.latitude, point.longitude
