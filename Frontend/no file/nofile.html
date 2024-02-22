@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Page Title</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        #menu {
+            position: absolute;
+            width: 45px;
+            height: 30px;
+            top: 95px;
+            left: 20px;
+            background: url('menu.jpg') no-repeat;
+            background-size: cover;
+        }
+
+        #button1 {
+            position: absolute;
+            width: 248px;
+            height: 65px;
+            top: 158px;
+            left: 73px;
+            border-radius: 50px;
+            background-color: rgba(34, 151, 161, 1);
+            color: rgba(255, 255, 255, 1);
+            font-family: 'Inter', sans-serif;
+            font-size: 20px;
+            font-weight: 400;
+            line-height: 24px;
+            letter-spacing: 0em;
+            text-align: center;
+        }
+
+        #button2 {
+            position: absolute;
+            width: 261px;
+            height: 65px;
+            top: 254px;
+            left: 66px;
+            border-radius: 50px;
+            background-color: rgba(34, 151, 161, 1);
+            color: rgba(255, 255, 255, 1);
+            font-family: 'Inter', sans-serif;
+            font-size: 20px;
+            font-weight: 400;
+            line-height: 24px;
+            letter-spacing: 0em;
+            text-align: center;
+        }
+
+        #filePhoto {
+            position: absolute;
+            top:250px;
+            left: -65px/* set the left value based on your layout */;
+            width: 522px/* set the width value based on your layout */;
+            height: 379px/* set the height value based on your layout */;
+            background: url('file.jpg') no-repeat;
+            background-size: cover;
+            z-index: -1;
+        }
+
+        #tablePhoto {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height:20% /* set the height value based on your layout */;
+            background: url('table.jpg') no-repeat;
+            background-size: cover;
+        }
+    </style>
+</head>
+<body>
+<div id="menu"></div>
+<button id="button1">Add Documents</button>
+<button id="button2">Statistics</button>
+<div id="filePhoto"></div>
+<div id="tablePhoto"></div>
+</body>
+</html>

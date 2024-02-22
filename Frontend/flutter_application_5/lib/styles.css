@@ -1,0 +1,73 @@
+
+body {
+    font-family: 'Roboto Flex', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 19px;
+    letter-spacing: 0em;
+    text-align: left;
+    margin: 0;
+    padding-top: 100px;
+}
+
+img {
+    width: 100px;
+    height: 100px;
+    position: fixed;
+    top: 110px;
+    left: 147px;
+}
+
+.title {
+    width: 290px;
+    height: 89px;
+    position: fixed;
+    top: 224px;
+    left: 52px;
+    font-family: 'Roboto Flex', sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 23px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: rgba(74, 156, 160, 1);
+}
+
+.content {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+    overflow-y: scroll;
+    max-height: calc(60vh - 110px); /* Використання calc для визначення висоти, що залишилася */
+    margin-top: 220px;
+}
+
+.decline-button,
+.accept-button {
+    width: 150px;
+    height: 60px;
+    border: 1px solid rgba(34, 151, 161, 1);
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 23px;
+    letter-spacing: 0em;
+    text-align: center;
+    border-radius: 40px; /* Заокруглені кути */
+    cursor: pointer;
+    position: fixed;
+    bottom: 20px;
+}
+
+.decline-button {
+    left: 21px;
+    background: rgba(34, 151, 161, 0.1);
+    color: rgba(34, 151, 161, 1);
+}
+
+.accept-button {
+    right: 21px;
+    background: linear-gradient(0deg, #2297A1, #2297A1),
+    linear-gradient(0deg, #57A3A7, #57A3A7);
+    color: #FFFFFF;
+    font-family: 'Roboto Flex', sans-serif;
+}

@@ -1,0 +1,181 @@
+body, html {
+    font-family: 'Roboto Flex', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    width: 100%;
+    max-width: 352px;
+    height: 100vh;
+    max-height: 844px;
+    box-sizing: border-box;
+}
+
+.back-text {
+    position: absolute;
+    top: 32px;
+    left: 10px; /* Adjusted left position to move the arrow to the left */
+    color: rgba(34, 151, 161, 1);
+    font-size: 19px;
+    font-family: 'Roboto Flex', sans-serif;
+    font-weight: 250;
+    line-height: 20px;
+    letter-spacing: 0em;
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.back-text.adjustable {
+    transition: all 0.3s ease-in-out; /* Add a smooth transition effect */
+}
+
+.back-text.adjustable:hover {
+    left: 20px; /* Adjust the left position on hover */
+    transform: scale(1.2); /* Increase the size on hover */
+}
+
+.verify-text {
+    font-family: 'Roboto Flex', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 30px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: rgba(0, 0, 0, 1);
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.verification-circle {
+    width: 270px;
+    height: 270px;
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 50%;
+    margin: 20px auto;
+    position: relative;
+}
+
+.email-icon {
+    width: 370px;
+    height: 490px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.instruction-text {
+    color: rgba(143, 142, 142, 1);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 18px;
+    letter-spacing: 0em;
+    text-align: center;
+    padding: 10px;
+    margin-top: 20px;
+    border-radius: 8px;
+}
+
+
+
+.code-input:not(:last-child) {
+    border-right: none;
+}
+
+/* Style your code input here */
+.code-input {
+    /* Customize your code input style as needed */
+    border: 2px solid #ccc;
+    border-radius: 16px; /* Adjusted border-radius for rounded corners */
+    padding: 10px;
+    margin: 0 5px;
+    width: calc(100% + 10px); /* Increase width by 20 pixels */
+    height: calc(100% + 30px); /* Increase height by 10 pixels */
+}
+
+.resend-text {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.resend-link {
+    font-family: 'Roboto Flex', sans-serif;
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: rgba(87, 163, 167, 1);
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 8px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.confirm-button {
+    background: rgba(87, 163, 167, 1);
+    color: #fff;
+    padding: 20px 80px; /* Adjust padding to increase the button size */
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+    margin-top: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.confirm-button:hover {
+    background-color: #005c60;
+}
+
+.change-email-text {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.change-email-link {
+    font-family: 'Roboto Flex', sans-serif;
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: rgba(87, 163, 167, 1);
+    text-decoration: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+/* Your existing styles... */
+
+.code-input-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.code-input {
+    /* Style your code input here */
+}
+
+.resend-text,
+.confirm-button,
+.change-email-text {
+    text-align: center;
+    margin-top: 20px;
+}

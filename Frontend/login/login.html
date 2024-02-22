@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: rgba(69, 154, 158, 0.9);
+            height: 844px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .circle1,
+        .circle2 {
+            position: absolute;
+            border-radius: 50%;
+            width: 267px;
+            height: 267px;
+            background-size: cover;
+        }
+
+        .circle1 {
+            top: 90px;
+            left: 78px;
+            background: url('circledark.png') no-repeat center center;
+        }
+
+        .circle2 {
+            top: 89px;
+            left: 63px;
+            background: url('circlelight.png') no-repeat center center;
+        }
+
+        .logo {
+            width: 417px;
+            height: 189px;
+            position: absolute;
+            top: 129px;
+            left: -16px;
+            z-index: 2;
+        }
+
+        .rounded-rectangle {
+            width: 400px;
+            height: 470px;
+            top: 392px;
+            background: rgba(255, 254, 254, 1);
+            border-radius: 30px;
+            position: absolute;
+            z-index: 1;
+        }
+
+        .email-container {
+            width: 333px;
+            height: 70px;
+            top: 500px;
+            left: 29px;
+            background: rgba(255, 254, 254, 1);
+            box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.2) inset;
+            position: absolute;
+            z-index: 3;
+            border-radius: 30px;
+            overflow: hidden;
+        }
+
+        .email-input {
+            width: 80%;
+            height: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+            font-size: 16px; /* Adjusted font size */
+        }
+
+        .login-button {
+            width: 290px;
+            height: 60px;
+            top: 605px;
+            left: 51px;
+            background: rgba(87, 163, 167, 1);
+            position: absolute;
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            z-index: 4;
+        }
+
+        .google-button,
+        .facebook-button {
+            width: 163px;
+            height: 48px;
+            position: absolute;
+            border: none;
+            border-radius: 30px;
+            font-family: 'Roboto Flex', sans-serif;
+            font-size: 15px;
+            font-weight: 400;
+            line-height: 18px;
+            letter-spacing: 0;
+            text-align: center;
+            cursor: pointer;
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+        }
+
+        .google-img,
+        .facebook-img {
+            width: 30px;
+            height: auto;
+            margin-right: 10px;
+        }
+
+        .google-img {
+            content: url('google.png');
+        }
+
+        .facebook-img {
+            content: url('facebook.png');
+        }
+
+        .google-button {
+            top: 724px;
+            left: 28px;
+            background: rgba(255, 254, 254, 1);
+        }
+
+        .facebook-button {
+            top: 724px;
+            left: 215px;
+            background: rgba(255, 254, 254, 1);
+        }
+    </style>
+    <title></title>
+</head>
+<body>
+<div class="circle1"></div>
+<div class="circle2"></div>
+<img src="logo.jpg" alt="Logo" class="logo">
+
+<div class="rounded-rectangle"></div>
+<div class="email-container">
+    <label>
+        <input type="text" class="email-input" placeholder="Enter your email">
+    </label>
+</div>
+
+<button class="login-button">Log In</button>
+
+<button class="google-button">
+    <img src="google.png" alt="Google" class="google-img">
+    Google
+</button>
+
+<button class="facebook-button">
+    <img src="facebook.png" alt="Facebook" class="facebook-img">
+    Facebook
+</button>
+
+</body>
+</html>

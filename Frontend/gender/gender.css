@@ -1,0 +1,65 @@
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: rgba(85, 162, 166, 1);
+}
+
+.title-text {
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 42px;
+    letter-spacing: 0em;
+    text-align: center;
+    width: 354px;
+    height: 195px;
+    top: 179px;
+    left: 20px;
+    position: absolute;
+    color: rgba(245, 245, 245, 1);
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px; /* Збільшили відступ від тексту до кнопок */
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    border: none;
+    border-radius: 40px;
+    line-height: 24px;
+    letter-spacing: 0em;
+    text-align: left;
+    cursor: pointer;
+}
+
+.male ,
+.female {
+    background-color: rgba(245, 245, 245, 0.89);
+}
+
+.next {
+    display: none;
+    font-family: 'Roboto Flex', sans-serif;
+    color: #fff;
+    font-size: 25px;
+    font-weight: 400;
+    line-height: 29px;
+    letter-spacing: 0em;
+    text-align: center;
+    width: 295px;
+    height: 60px;
+    background: rgba(34, 151, 161, 1);
+    cursor: pointer;
+    top: 60px;
+    left: 55px;
+}

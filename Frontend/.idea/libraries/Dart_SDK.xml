@@ -1,0 +1,29 @@
+<component name="libraryTable">
+  <library name="Dart SDK">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../../../../tools/dart-sdk-hidden/lib/async" />
+      <root url="file://$PROJECT_DIR$/../../../../tools/dart-sdk-hidden/lib/cli" />
+      <root url="file://$PROJECT_DIR$/../../../../tools/dart-sdk-hidden/lib/collection" />
+      <root url="file://$PROJECT_DIR$/../../../../tools/dart-sdk-hidden/lib/convert" />
+      <root url="file://$PROJECT_DIR$/../../../../tools/dart-sdk-hidden/lib/core" />
+      <root url="file://$PROJECT_DIR$/../../../../tools/dart-sdk-hidden/lib/developer" />
+      <root url="file://$PROJECT_DIR$/../../../../tools/dart-sdk-hidden/lib/ffi" />
+      <root url="file://$PROJECT_DIR$/../../../../tools/dart-sdk-hidden/lib/html" />
+      <root url="file://$PROJECT_DIR$/../../../../tools/dart-sdk-hidden/lib/indexed_db" />
+      <root url="file://$PROJECT_DIR$/../../../../tools/dart-sdk-hidden/lib/io" />
+      <root url="file://$PROJECT_DIR$/../../../../tools/dart-sdk-hidden/lib/isolate" />
+      <root url="file://$PROJECT_DIR$/../../../../tools/dart-sdk-hidden/lib/js" />
+      <root url="file://$PROJECT_DIR$/../../../../tools/dart-sdk-hidden/lib/js_interop" />
+      <root url="file://$PROJECT_DIR$/../../../../tools/dart-sdk-hidden/lib/js_interop_unsafe" />
+      <root url="file://$PROJECT_DIR$/../../../../tools/dart-sdk-hidden/lib/js_util" />
+      <root url="file://$PROJECT_DIR$/../../../../tools/dart-sdk-hidden/lib/math" />
+      <root url="file://$PROJECT_DIR$/../../../../tools/dart-sdk-hidden/lib/mirrors" />
+      <root url="file://$PROJECT_DIR$/../../../../tools/dart-sdk-hidden/lib/svg" />
+      <root url="file://$PROJECT_DIR$/../../../../tools/dart-sdk-hidden/lib/typed_data" />
+      <root url="file://$PROJECT_DIR$/../../../../tools/dart-sdk-hidden/lib/web_audio" />
+      <root url="file://$PROJECT_DIR$/../../../../tools/dart-sdk-hidden/lib/web_gl" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
