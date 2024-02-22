@@ -1,7 +1,5 @@
 import math
-# import sys
-# sys.path.append(r'..\other')
-from other.error import Error
+from Backend.other.error import Error
 
 error = Error()
 

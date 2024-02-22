@@ -1,5 +1,6 @@
 from fastapi.responses import JSONResponse
-from other.logger_file import logger
+# from ..other.logger_file import logger
+from Backend.other.logger_file import logger
 
 class Error:
     @staticmethod

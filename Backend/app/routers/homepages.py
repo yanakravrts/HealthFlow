@@ -1,23 +1,19 @@
-from fastapi import FastAPI, Form, Query
+from fastapi import APIRouter, Form, Query
 from fastapi.responses import JSONResponse, RedirectResponse
 from pydantic import EmailStr
 from typing import List
 from datetime import date
-# import sys
-# sys.path.append(r'..\other')
-# sys.path.append(r'..\managers')
-from other.logger_file import logger
-from other.error import Error
-from other.models import Profile, Article, HelpResponse, AboutAs, ProfileName, BloodDonationCenters, Event
-from other.data import blood_donation_data, profiles, articles, articles1
+from Backend.other.logger_file import logger
+from Backend.other.error import Error
+from Backend.other.models import Profile, Article, HelpResponse, AboutAs, ProfileName, BloodDonationCenters, Event
+from Backend.other.data import blood_donation_data, profiles, articles, articles1
 import random
-from datetime import datetime
 
-app = FastAPI()
+router = APIRouter()
 error = Error()
 
 
-@app.get("/burger", response_model=ProfileName)
+@router.get("/burger", response_model=ProfileName)
 async def burger(profile_id: str):
     """
     Retrieves the username of a profile from the database based on the provided profile ID.
@@ -39,7 +35,7 @@ async def burger(profile_id: str):
         return error.error_500(e, "Internal Server Error")
     
 
-@app.post("/burger/change_profile", response_model=Profile)
+@router.post("/burger/change_profile", response_model=Profile)
 async def change_profile(
     profile_id: str,
     name: str = Form(...),
@@ -77,7 +73,7 @@ async def change_profile(
         return error.error_500(e, "Internal Server Error")
 
     
-@app.get("/burger/help", response_model=HelpResponse)
+@router.get("/burger/help", response_model=HelpResponse)
 async def help(question: str = Query(..., title="Your Question", description="Please enter your question here")):
     """
     Accepts a question from the user.
@@ -98,7 +94,7 @@ async def help(question: str = Query(..., title="Your Question", description="Pl
         return error.error_500(e, "Internal Server Error")
     
 
-@app.get("/burger/blood_donation_centers/", response_model=BloodDonationCenters)
+@router.get("/burger/blood_donation_centers/", response_model=BloodDonationCenters)
 async def get_blood_donation_centers(blood_group: str = Query(..., title="Blood Group", description="Enter your blood group")):
     """
     Retrieves blood donation centers based on the specified blood group.
@@ -122,7 +118,7 @@ async def get_blood_donation_centers(blood_group: str = Query(..., title="Blood 
         return error.error_500(e, "Internal Server Error")
     
     
-@app.get("/burger/AboutAS", response_model=AboutAs)
+@router.get("/burger/AboutAS", response_model=AboutAs)
 async def about_as():
     """
     Retrieves information about the HealthFlow app and its creators.
@@ -139,7 +135,7 @@ async def about_as():
         return error.error_500(e, "Internal Server Error")
     
 
-@app.get("/", response_model=List[Article])
+@router.get("/", response_model=List[Article])
 async def home():
     """
     Retrieves a list of random articles for the homepage.
@@ -163,7 +159,7 @@ async def home():
         return error.error_500(e, "Internal Server Error")
 
 
-@app.get("/article/{article_id}", response_model=Article, response_model_exclude={"id"})
+@router.get("/article/{article_id}", response_model=Article, response_model_exclude={"id"})
 def read_article(article_id: int):
     """
     Retrieves details of a specific article based on its ID.
@@ -189,7 +185,7 @@ def read_article(article_id: int):
         return error.error_500(e, "Internal Server Error")
     
 
-@app.get("/article/go_to_external_link/{article_id}")
+@router.get("/article/go_to_external_link/{article_id}")
 async def go_to_external_link(article_id: int):
     """
     Redirects the user to an external link associated with a specific article based on its ID.
