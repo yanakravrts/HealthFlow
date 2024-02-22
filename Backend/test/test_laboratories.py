@@ -1,7 +1,4 @@
-# import sys
-# sys.path.append(r'..\Backend\other')
-# sys.path.append(r'..\Backend\pages')
-from pages.laboratories import Point
+from app.routers.laboratories import Point
 from managers.geo_manager import points_in_radius
 import unittest
 

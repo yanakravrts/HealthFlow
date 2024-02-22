@@ -1,23 +1,16 @@
-from fastapi import FastAPI, Query
+from fastapi import APIRouter, Query
 import json
 from time import time
-# import sys
-# sys.path.append(r'..\base')
-# sys.path.append(r'..\managers')
-# sys.path.append(r'..\other')
-from managers.geo_manager import points_in_radius
-from base.supa_client import supabase_client
-from other.models import Point
-from other.error import Error
+from Backend.managers.geo_manager import points_in_radius
+from Backend.base.supa_client import supabase_client
+from Backend.other.models import Point
+from Backend.other.error import Error
 
 error = Error()
-
-app = FastAPI()
-
+router = APIRouter()
 
 
-@app.post("/laboratories")
-
+@router.post("/laboratories")
 async def add_event(region: str = Query(..., description="Name of the region"),
                     center_lat: float = Query(..., description="Latitude of the center point"),
                     center_lon: float = Query(..., description="Longitude of the center point"),

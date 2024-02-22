@@ -1,15 +1,16 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, EmailStr
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import random
 from cachetools import TTLCache
-# import sys
-# sys.path.append(r'..\other')
-from other.logger_file import logger
-from other.error import Error
-from fastapi.responses import JSONResponse
+from Backend.other.logger_file import logger
+from Backend.other.error import Error
+
+
+router = APIRouter()
+
 
 class EmailService:
     def __init__(self):
@@ -63,7 +64,6 @@ class EmailService:
 
             return {"message": "Email sent successfully"}
         except Exception as e:
-
             logger.error(f"An error occurred: {str(e)}")
             return Error.error_500(e, 500, f"An error occurred: {str(e)}")
         finally:
@@ -77,10 +77,9 @@ class EmailSchema(BaseModel):
     subject: str
     body: str
 
-app = FastAPI()
 email_service = EmailService()
 
-@app.post("/send_email/")
+@router.post("/send_email/")
 async def send_email(email: EmailSchema):
     """
     Endpoint to send an email with a verification code.
@@ -97,7 +96,7 @@ async def send_email(email: EmailSchema):
     except HTTPException as e:
         return e
 
-@app.post("/check_email/")
+@router.post("/check_email/")
 async def check_email(verification_code: str, receiver_email: EmailStr):
     """
     Endpoint to check the verification code.
