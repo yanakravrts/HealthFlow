@@ -16,8 +16,8 @@ SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-
 @router.post("/upload/", tags=["file"])
+
 async def upload_file(request: Request):
     """
     Handles the upload of a file to Supabase storage.
@@ -49,6 +49,7 @@ async def upload_file(request: Request):
 
 
 @router.get("/get_file/{file_name}", tags=["file"])
+
 async def get_file(file_name: str):
     """
     Retrieves a file from Supabase storage and extracts text from a PDF file if available.
