@@ -428,7 +428,7 @@ class _MyFormState extends State<MyForm> {
     final String email = _emailController.text;
     print(password);
     // Тут ви можете використовувати ваш URL та дані для відправки на сервер
-    final url = Uri.parse('http://192.168.1.13:3001/Account/Login');
+    final url = Uri.parse('http://192.168.1.4:3001/Account/Login');
     final response = await http.post(
       url,
       body: {
@@ -442,7 +442,7 @@ class _MyFormState extends State<MyForm> {
       print('Data sent successfully');
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => My404Page()),
+        MaterialPageRoute(builder: (context) => HomePage()),
       );
     } else {
       // Обробка помилки відправки

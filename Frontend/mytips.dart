@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'article.dart';
-
+import 'article.dart'; // Припускаю, що вам потрібно імпортувати файл із сторінкою профілю
+import 'Profile.dart';
 void main() {
   runApp(MyApp());
 }
@@ -236,34 +236,7 @@ class HomePage extends StatelessWidget {
           Positioned(
             top: 0,
             left: 0,
-            child: CustomMyRectangle(
-              // width: 200,
-              // height: 100,
-              // color: Colors.blue,
-            ),
-          ),
-          Positioned(
-            top: 60,
-            left: -5,
-            child: Transform.scale(
-              scale: 0.7,
-              child: Elipse(
-                width: 150,
-                height: 130,
-                color: Colors.blue,
-              ),
-            ),
-          ),
-          Positioned(
-            top: -33,
-            left: -55,
-            child: Transform.scale(
-              scale: 0.61,
-              child: Image.asset(
-                'assets/4.png',
-                fit: BoxFit.cover,
-              ),
-            ),
+            child: CustomMyRectangle(),
           ),
           Positioned(
             top: 100,
@@ -283,15 +256,23 @@ class HomePage extends StatelessWidget {
           Positioned(
             top: 130,
             left: 135,
-            child: Text(
-              'View profile',
-              style: TextStyle(
-                fontFamily: 'Roboto Flex',
-                fontSize: 21,
-                fontWeight: FontWeight.w400,
-                color: const Color.fromRGBO(128, 128, 128, 1),
-                height: 23 / 20,
-                letterSpacing: 0,
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfilePage()),
+                );
+              },
+              child: Text(
+                'View profile',
+                style: TextStyle(
+                  fontFamily: 'Roboto Flex',
+                  fontSize: 21,
+                  fontWeight: FontWeight.w400,
+                  color: const Color.fromRGBO(128, 128, 128, 1),
+                  height: 23 / 20,
+                  letterSpacing: 0,
+                ),
               ),
             ),
           ),
@@ -300,7 +281,29 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+class Elipse extends StatelessWidget {
+  final double width;
+  final double height;
+  final Color color;
 
+  Elipse({
+    required this.width,
+    required this.height,
+    this.color = Colors.white,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 150,
+      height: 130,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: const Color.fromRGBO(85, 162, 166, 1),
+      ),
+    );
+  }
+}
 class CustomMyRectangle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -338,7 +341,44 @@ class CustomMyRectangle extends StatelessWidget {
                 ),
               ),
             ),
-
+            Positioned(
+              top: 100,
+              left: 135,
+              child: Text(
+                'Name',
+                style: TextStyle(
+                  fontFamily: 'Roboto Flex',
+                  fontSize: 24,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black,
+                  height: 23 / 20,
+                  letterSpacing: 0,
+                ),
+              ),
+            ),
+            Positioned(
+              top: 130,
+              left: 135,
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ProfilePage()),
+                  );
+                },
+                child: Text(
+                  'View profile',
+                  style: TextStyle(
+                    fontFamily: 'Roboto Flex',
+                    fontSize: 21,
+                    fontWeight: FontWeight.w400,
+                    color: const Color.fromRGBO(128, 128, 128, 1),
+                    height: 23 / 20,
+                    letterSpacing: 0,
+                  ),
+                ),
+              ),
+            ),
             Positioned(
               top: 180,
               left: 70,
@@ -420,26 +460,122 @@ class CustomMyRectangle extends StatelessWidget {
     );
   }
 }
-class Elipse extends StatelessWidget {
-  final double width;
-  final double height;
-  final Color color;
 
-  Elipse({
-    required this.width,
-    required this.height,
-    this.color = Colors.white,
-  });
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 150,
-      height: 130,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: const Color.fromRGBO(85, 162, 166, 1),
-      ),
-    );
-  }
-}
+// class CustomMyRectangle extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Positioned(
+//       top:0,
+//       left:0,
+//       child: Container(
+//         width: 350,
+//         height: 900,
+//         color: const Color.fromRGBO(245, 245, 245, 1),
+//         child: Stack(
+//           children: [
+//             Positioned(
+//               top: 60,
+//               left: -5,
+//               child: Transform.scale(
+//                 scale: 0.7,
+//                 child: Elipse(
+//                   width: 150,
+//                   height: 130,
+//                   color: Colors.blue,
+//                 ),
+//               ),
+//             ),
+//             Positioned(
+//               top: -33,
+//               left: -55,
+//               child: Transform.scale(
+//                 scale: 0.61,
+//                 child: Image.asset(
+//                   'assets/4.png',
+//                   fit: BoxFit.cover,
+//                 ),
+//               ),
+//             ),
+//             Positioned(
+//               top: 180,
+//               left: 70,
+//               child: Transform.scale(
+//                 scale: 2.58,
+//                 child: Image.asset('assets/blood.png', width: 100, height: 100),
+//               ),
+//             ),
+//             Positioned(
+//               top: 265,
+//               left:67,
+//               child: Transform.scale(
+//                 scale: 2.43,
+//                 child: Image.asset('assets/q.png', width: 100, height: 100),
+//               ),
+//             ),
+//             Positioned(
+//               top: 345,
+//               left: 67,
+//               child: Transform.scale(
+//                 scale: 2.43,
+//                 child: Image.asset('assets/people.png', width: 100, height: 100),
+//               ),
+//             ),
+//             Positioned(
+//               top: 220,
+//               left: 100,
+//               child: Text(
+//                 'Blood Bank',
+//                 style: TextStyle(
+//                   fontFamily: 'Roboto Flex',
+//                   fontSize: 22,
+//                   fontWeight: FontWeight.w400,
+//                   color: const Color.fromRGBO(128, 128, 128, 1),
+//                   height: 23 / 20,
+//                   letterSpacing: 0,
+//                 ),
+//               ),
+//             ),
+//             Positioned(
+//               top: 305,
+//               left: 100,
+//               child: Text(
+//                 'Help',
+//                 style: TextStyle(
+//                   fontFamily: 'Roboto Flex',
+//                   fontSize: 22,
+//                   fontWeight: FontWeight.w400,
+//                   color: const Color.fromRGBO(128, 128, 128, 1),
+//                   height: 23 / 20,
+//                   letterSpacing: 0,
+//                 ),
+//               ),
+//             ),
+//             Positioned(
+//               top: 385,
+//               left: 100,
+//               child: Text(
+//                 'About us',
+//                 style: TextStyle(
+//                   fontFamily: 'Roboto Flex',
+//                   fontSize: 22,
+//                   fontWeight: FontWeight.w400,
+//                   color: const Color.fromRGBO(128, 128, 128, 1),
+//                   height: 23 / 20,
+//                   letterSpacing: 0,
+//                 ),
+//               ),
+//             ),
+//             Container(
+//               width: 356,
+//               height: 1,
+//               margin: EdgeInsets.only(top: 180),
+//               color: Color.fromRGBO(143, 142, 142, 1),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+//
