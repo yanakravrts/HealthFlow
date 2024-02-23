@@ -79,7 +79,9 @@ class EmailSchema(BaseModel):
 
 email_service = EmailService()
 
-@router.post("/send_email/")
+
+@router.post("/send_email/", tags=["mailer"])
+
 async def send_email(email: EmailSchema):
     """
     Endpoint to send an email with a verification code.
@@ -96,7 +98,8 @@ async def send_email(email: EmailSchema):
     except HTTPException as e:
         return e
 
-@router.post("/check_email/")
+
+@router.post("/check_email/", tags=["mailer"])
 async def check_email(verification_code: str, receiver_email: EmailStr):
     """
     Endpoint to check the verification code.

@@ -13,7 +13,8 @@ router = APIRouter()
 error = Error()
 
 
-@router.get("/burger", response_model=ProfileName)
+@router.get("/burger", response_model=ProfileName, tags=["homepages"])
+
 async def burger(profile_id: str):
     """
     Retrieves the username of a profile from the database based on the provided profile ID.
@@ -35,7 +36,9 @@ async def burger(profile_id: str):
         return error.error_500(e, "Internal Server Error")
     
 
-@router.post("/burger/change_profile", response_model=Profile)
+
+@router.post("/burger/change_profile", response_model=Profile, tags=["homepages"])
+
 async def change_profile(
     profile_id: str,
     name: str = Form(...),
@@ -72,8 +75,9 @@ async def change_profile(
     except Exception as e:
         return error.error_500(e, "Internal Server Error")
 
-    
-@router.get("/burger/help", response_model=HelpResponse)
+
+@router.get("/burger/help", response_model=HelpResponse, tags=["homepages"])
+
 async def help(question: str = Query(..., title="Your Question", description="Please enter your question here")):
     """
     Accepts a question from the user.
@@ -94,7 +98,9 @@ async def help(question: str = Query(..., title="Your Question", description="Pl
         return error.error_500(e, "Internal Server Error")
     
 
-@router.get("/burger/blood_donation_centers/", response_model=BloodDonationCenters)
+
+@router.get("/burger/blood_donation_centers/", response_model=BloodDonationCenters, tags=["homepages"])
+
 async def get_blood_donation_centers(blood_group: str = Query(..., title="Blood Group", description="Enter your blood group")):
     """
     Retrieves blood donation centers based on the specified blood group.
@@ -118,7 +124,9 @@ async def get_blood_donation_centers(blood_group: str = Query(..., title="Blood 
         return error.error_500(e, "Internal Server Error")
     
     
-@router.get("/burger/AboutAS", response_model=AboutAs)
+
+@router.get("/burger/AboutAS", response_model=AboutAs, tags=["homepages"])
+
 async def about_as():
     """
     Retrieves information about the HealthFlow app and its creators.
@@ -135,7 +143,9 @@ async def about_as():
         return error.error_500(e, "Internal Server Error")
     
 
-@router.get("/", response_model=List[Article])
+
+@router.get("/", response_model=List[Article], tags=["homepages"])
+
 async def home():
     """
     Retrieves a list of random articles for the homepage.
@@ -159,7 +169,9 @@ async def home():
         return error.error_500(e, "Internal Server Error")
 
 
-@router.get("/article/{article_id}", response_model=Article, response_model_exclude={"id"})
+
+@router.get("/article/{article_id}", response_model=Article, response_model_exclude={"id"}, tags=["homepages"])
+
 def read_article(article_id: int):
     """
     Retrieves details of a specific article based on its ID.
@@ -185,7 +197,8 @@ def read_article(article_id: int):
         return error.error_500(e, "Internal Server Error")
     
 
-@router.get("/article/go_to_external_link/{article_id}")
+@router.get("/article/go_to_external_link/{article_id}", tags=["homepages"])
+
 async def go_to_external_link(article_id: int):
     """
     Redirects the user to an external link associated with a specific article based on its ID.
