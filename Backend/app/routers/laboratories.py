@@ -10,7 +10,9 @@ error = Error()
 router = APIRouter()
 
 
-@router.post("/laboratories")
+
+@router.post("/laboratories", tags=["laboratories"])
+
 async def add_event(region: str = Query(..., description="Name of the region"),
                     center_lat: float = Query(..., description="Latitude of the center point"),
                     center_lon: float = Query(..., description="Longitude of the center point"),
