@@ -1,7 +1,5 @@
 import asyncio
-from Backend.app.routers.mailer import EmailService, send_email, check_email,EmailSchema
-from Backend.other.logger_file import logger
-from Backend.other.error import Error
+from Backend.app.routers.mailer import EmailService, send_email, check_email, EmailSchema
 import unittest
 from unittest.mock import patch, MagicMock
 
@@ -20,27 +18,20 @@ class TestEmailService(unittest.TestCase):
         mock_smtp_instance.sendmail.assert_called_once()
         mock_smtp_instance.quit.assert_called_once()
 
-class TestEmailEndpoints(unittest.TestCase):
     @patch('Backend.app.routers.mailer.email_service')
-    def test_send_email_endpoint(self, mock_email_service):
+    def test_send_email_and_check_email_endpoints(self, mock_email_service):
+        # Тестування відправки email
         mock_email_service.send_email.return_value = {"message": "Email sent successfully"}
 
         email_data = EmailSchema(receiver_email="test@example.com", subject="Test Subject", body="Test Body")
-        result = asyncio.run(send_email(email_data))
+        result_send_email = asyncio.run(send_email(email_data))
+        self.assertEqual(result_send_email, {"message": "Email sent successfully"})
 
-        self.assertEqual(result, {"message": "Email sent successfully"})
-    @patch('Backend.app.routers.mailer.email_service')
-    def test_check_email_endpoint_success(self, mock_email_service):
+        # Тестування перевірки email
         mock_email_service.verification_codes.get.return_value = "123456"
+        result_check_email_success = asyncio.run(check_email("123456", "test@example.com"))
+        self.assertEqual(result_check_email_success, {"message": "Verification successful"})
 
-        result = asyncio.run(check_email("123456", "test@example.com"))  
-
-        self.assertEqual(result, {"message": "Verification successful"})
-
-    @patch('Backend.app.routers.mailer.email_service')
-    def test_check_email_endpoint_failure(self, mock_email_service):
         mock_email_service.verification_codes.get.return_value = None
-
-        result = asyncio.run(check_email("123456", "test@example.com"))  
-
-        self.assertEqual(result.status_code, 404)  # Assuming Error.error_404 returns a JSONResponse with status code 404
+        result_check_email_failure = asyncio.run(check_email("123456", "test@example.com"))
+        self.assertEqual(result_check_email_failure.status_code, 404)
