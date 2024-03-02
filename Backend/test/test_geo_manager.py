@@ -1,4 +1,4 @@
-from routers.laboratories import Point
+from other.models import Point
 from managers.geo_manager import points_in_radius
 import unittest
 
@@ -28,7 +28,6 @@ class TestPointInRadius(unittest.TestCase):
             with self.subTest(radius=radius):
                 result = points_in_radius(self.central_lat, self.central_lon, radius, self.lab_data)
                 self.assertEqual(result, expected)  
-
 
 
 
