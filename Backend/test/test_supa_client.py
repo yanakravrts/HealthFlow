@@ -1,4 +1,4 @@
-from Backend.base.supa_client import Settings, SupabaseDBClient
+from base.supa_client import Settings, SupabaseDBClient
 from unittest.mock import patch, MagicMock
 from supabase._sync.client import SupabaseException
 import unittest

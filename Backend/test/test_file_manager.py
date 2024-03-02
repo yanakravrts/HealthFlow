@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import MagicMock, patch
-from Backend.managers.file_manager import extract_text_from_pdf
+from managers.file_manager import extract_text_from_pdf
 
 @pytest.mark.asyncio
 async def test_extract_text_from_pdf():

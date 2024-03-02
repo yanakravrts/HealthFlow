@@ -5,8 +5,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import random
 from cachetools import TTLCache
-from Backend.other.logger_file import logger
-from Backend.other.error import Error
+from other.logger_file import logger
+from other.error import Error
 
 
 router = APIRouter()

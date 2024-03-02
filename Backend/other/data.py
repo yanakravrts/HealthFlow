@@ -1,4 +1,4 @@
-from Backend.other.models import ArticlePage, Article
+from other.models import ArticlePage, Article
 
 blood_donation_data = {
     "Address1": "A+",

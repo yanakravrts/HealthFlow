@@ -3,10 +3,10 @@ from fastapi.responses import JSONResponse, RedirectResponse
 from pydantic import EmailStr
 from typing import List
 from datetime import date
-from Backend.other.logger_file import logger
-from Backend.other.error import Error
-from Backend.other.models import Profile, Article, HelpResponse, AboutAs, ProfileName, BloodDonationCenters, Event
-from Backend.other.data import blood_donation_data, profiles, articles, articles1
+from other.logger_file import logger
+from other.error import Error
+from other.models import Profile, Article, HelpResponse, AboutAs, ProfileName, BloodDonationCenters, Event
+from other.data import blood_donation_data, profiles, articles, articles1
 import random
 
 router = APIRouter()
