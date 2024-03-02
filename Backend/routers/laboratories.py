@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Query
 import json
 from time import time
-from Backend.managers.geo_manager import points_in_radius
-from Backend.base.supa_client import supabase_client
-from Backend.other.models import Point
-from Backend.other.error import Error
+from managers.geo_manager import points_in_radius
+from base.supa_client import supabase_client
+from other.models import Point
+from other.error import Error
 
 error = Error()
 router = APIRouter()

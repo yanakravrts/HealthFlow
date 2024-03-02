@@ -4,7 +4,7 @@ from supabase._sync.client import SupabaseException
 import unittest
 
 class TestSupabaseDBClient(unittest.TestCase):
-    @patch('supa_client.create_client')
+    @patch('Backend.base.supa_client.create_client')
     def test_connect_success(self, mock_create_client):
         mock_create_client.return_value = MagicMock()
         
@@ -17,7 +17,7 @@ class TestSupabaseDBClient(unittest.TestCase):
         self.assertEqual(connection_result.notification, "Connected successfully")
         self.assertEqual(connection_result.status, 200)
         
-    @patch('supa_client.create_client')
+    @patch('Backend.base.supa_client.create_client')
     def test_connect_failure(self, mock_create_client):
         mock_create_client.side_effect = SupabaseException("Connection failed")
         

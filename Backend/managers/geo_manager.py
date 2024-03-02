@@ -1,5 +1,5 @@
 import math
-from Backend.other.error import Error
+from other.error import Error
 
 error = Error()
 
