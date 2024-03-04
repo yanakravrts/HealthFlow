@@ -1,4 +1,4 @@
-from base.supa_client import SupabaseDBClient, settings
+from Backend.base.supa_client import SupabaseDBClient, settings
 from supabase._sync.client import SupabaseException
 from postgrest.exceptions import APIError
 
