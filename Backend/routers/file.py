@@ -1,10 +1,10 @@
 from dotenv import load_dotenv
 import os
 from supabase import create_client
-from other.error import Error
-from other.logger_file import logger
+from Backend.other.error import Error
+from Backend.other.logger_file import logger
 from fastapi import Request, APIRouter
-from managers.file_manager import extract_text_from_pdf
+from Backend.managers.file_manager import extract_text_from_pdf
 
 router = APIRouter()
 error = Error()
