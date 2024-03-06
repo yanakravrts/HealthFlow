@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers import file, homepages, laboratories, mailer
+from Backend.app.routers import file, homepages, laboratories, mailer
 
 app = FastAPI()
 
