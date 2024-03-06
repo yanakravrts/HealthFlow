@@ -1,8 +1,8 @@
 from dotenv import load_dotenv
 import os
 from supabase import create_client
-from Backend.other.logger_file import logger
 from Backend.other.error import Error
+from Backend.other.logger_file import logger
 from fastapi import Request, APIRouter
 from Backend.managers.file_manager import extract_text_from_pdf
 
@@ -16,8 +16,8 @@ SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+@router.post("/upload/", tags=["file"])
 
-@router.post("/upload/")
 async def upload_file(request: Request):
     """
     Handles the upload of a file to Supabase storage.
@@ -48,7 +48,8 @@ async def upload_file(request: Request):
         return error.error_500(e, "An error occurred while uploading file")
 
 
-@router.get("/get_file/{file_name}")
+@router.get("/get_file/{file_name}", tags=["file"])
+
 async def get_file(file_name: str):
     """
     Retrieves a file from Supabase storage and extracts text from a PDF file if available.
