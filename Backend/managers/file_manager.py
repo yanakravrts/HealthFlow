@@ -12,7 +12,12 @@ async def extract_table_from_pdf(file_content: bytes) -> list:
     - Extracted table from the PDF file as a list.
     """
     with pdfplumber.open(io.BytesIO(file_content)) as pdf:
-        first_page = pdf.pages[0]
-        table = first_page.extract_table()
+        for page in pdf.pages:
+          table = page.extract_table()
+          if table:
+            for row in table:
+                print(row)
+            found_table = True
+        
     return table
 

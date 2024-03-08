@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'mytips.dart';
+import 'package:intl/intl.dart';
+import 'homepage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class  ProfilePage extends StatelessWidget {
+class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
   @override
@@ -32,13 +32,7 @@ class  ProfilePage extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            Positioned(
-              top: 0,
-              left: 3,
-              width: 220,
-              height: 220,
-              child: Image.asset('assets/back.png'),
-            ),
+
             Positioned(
               top: 70,
               left: 124,
@@ -64,6 +58,34 @@ class  ProfilePage extends StatelessWidget {
               width: 413,
               height: 593,
               child: LoginLabel(),
+            ),
+            Positioned(
+                top: 55,
+                left: -20,
+                child:TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                    );
+                    print('Back button clicked');
+
+                  }, // Image tapped
+                  child: Image.asset(
+                    'assets/back.png',
+                    fit: BoxFit.cover, // Fixes border issues
+                    width:320,
+                    height: 110,
+                  ),
+                )
+              // child: ElevatedButton.icon(
+              //   onPressed: () {
+              //
+              //   },
+              //
+              //   icon: Image.asset('assets/back.png'),
+              //   label: Text(""),
+              // ),
             ),
           ],
         ),
@@ -95,7 +117,6 @@ Future<void> sendRequest(BuildContext context) async {
   }
 }
 
-// перекинути на сторінку
 class LoginLabel extends StatelessWidget {
   const LoginLabel({Key? key}) : super(key: key);
 
@@ -177,17 +198,20 @@ class ECon extends StatelessWidget {
       width: 50,
       height: 50,
       decoration: BoxDecoration(
-          color: Color.fromRGBO(217, 217, 217, 0.72),
+        color: Color.fromRGBO(217, 217, 217, 0.72),
       ),
     );
   }
 }
 
 class FormInput extends StatelessWidget {
-  const FormInput(this._controller, this._placeholder, {Key? key})
-      : super(key: key);
   final TextEditingController _controller;
   final String _placeholder;
+  final bool isEmail;
+  final bool isDateOfBirth;
+
+  const FormInput(this._controller, this._placeholder, {Key? key, this.isEmail = false, this.isDateOfBirth = false}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -200,18 +224,10 @@ class FormInput extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
         ),
         child: Stack(children: [
-          // Positioned(
-          //   top: 3,
-          //   left: 4,
-          //   height: 75,
-          //   width: 353,
-          //   child: ECon(),
-          // ),
           TextFormField(
             controller: _controller,
             decoration: InputDecoration(
-              contentPadding:
-              EdgeInsets.symmetric(vertical: 13, horizontal: 20),
+              contentPadding: EdgeInsets.symmetric(vertical: 13, horizontal: 20),
               hintText: _placeholder,
               border: InputBorder.none,
             ),
@@ -220,14 +236,41 @@ class FormInput extends StatelessWidget {
               fontFamily: 'Inter',
               fontSize: 23,
             ),
+            validator: (value) {
+              if (isEmail) {
+                final emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                if (!emailRegExp.hasMatch(value ?? '')) {
+                  return 'Enter a valid email';
+                }
+              }
+              return null;
+            },
+            onTap: () {
+              if (isDateOfBirth) {
+                _selectDate(context);
+              }
+            },
           ),
         ]));
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now());
+    if (pickedDate != null) {
+      _controller.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+    }
   }
 }
 
 class LoginButton extends StatelessWidget {
-  const LoginButton(this._onPressed, {Key? key}) : super(key: key);
   final Function()? _onPressed;
+
+  const LoginButton(this._onPressed, {Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -257,25 +300,6 @@ class LoginButton extends StatelessWidget {
       ),
     );
   }
-
-  void sendRequest(BuildContext context) async {
-    final url = Uri.parse('https://jsonplaceholder.typicode.com/posts');
-    final response = await http.post(
-      url,
-      body: {
-        'title': 'foo',
-        'body': 'bar',
-        'userId': '1',
-      },
-    );
-
-    if (response.statusCode == 201) {
-      final Map<String, dynamic> data = json.decode(response.body);
-      print('Post request successful: $data');
-    } else {
-      print('Post request failed with status: ${response.statusCode}');
-    }
-  }
 }
 
 class MyForm extends StatefulWidget {
@@ -289,12 +313,12 @@ class _MyFormState extends State<MyForm> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _dataController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+
   Future<void> _submitForm() async {
     final String name = _nameController.text;
     final String data = _dataController.text;
     final String email = _emailController.text;
     print(name);
-    // Тут ви можете використовувати ваш URL та дані для відправки на сервер
     final url = Uri.parse('http://192.168.1.4:3001/Account/Login');
     final response = await http.post(
       url,
@@ -306,14 +330,8 @@ class _MyFormState extends State<MyForm> {
     );
 
     if (response.statusCode == 200) {
-      // Обробка успішної відправки
       print('Data sent successfully');
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => HomePage()),
-      // );
     } else {
-      // Обробка помилки відправки
       print('Error sending data: ${response.statusCode}');
     }
   }
@@ -334,14 +352,14 @@ class _MyFormState extends State<MyForm> {
           left: 18,
           height: 70,
           width: 370,
-          child: FormInput(_dataController, "Date of birth"),
+          child: FormInput(_dataController, "Date of birth", isDateOfBirth: true),
         ),
         Positioned(
           top: 250,
           left: 18,
           height: 70,
           width: 370,
-          child: FormInput(_emailController, "Email"),
+          child: FormInput(_emailController, "Email", isEmail: true),
         ),
         Positioned(
           top: 440,
