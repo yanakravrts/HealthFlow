@@ -5,6 +5,9 @@ from Backend.other.error import Error
 from Backend.other.logger_file import logger
 from fastapi import Request, APIRouter
 from Backend.managers.file_manager import extract_text_from_pdf
+from Backend.base.supa_client import SupabaseDBClient, settings
+
+# supabase = SupabaseDBClient(config=settings)
 
 router = APIRouter()
 error = Error()
