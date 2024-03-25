@@ -5,6 +5,8 @@ from Backend.managers.geo_manager import points_in_radius
 from Backend.base.supa_client import supabase_client
 from Backend.other.models import Point
 from Backend.other.error import Error
+from datetime import datetime, timezone
+
 
 error = Error()
 router = APIRouter()
@@ -42,7 +44,7 @@ Returns:
         response = supabase_client.supabase.table("laboratory") \
             .select("id", "name", "latitude", "longitude") \
             .eq("region", region).execute()
-
+        
         data = response.model_dump_json()
         lab_data = [Point(id=item["id"], name=item["name"], latitude=item["latitude"], longitude=item["longitude"]) for
                     item in json.loads(data)["data"]]
@@ -55,3 +57,55 @@ Returns:
         return result
     except Exception as e:
         error.error_500(e, f"An error occurred while retrieving laboratories within radius: {e}")
+
+
+@router.post("/create_visit", tags=["laboratories"])
+async def create_user_visit(user_id: int = Query(..., description="User ID"),
+                      status_id: int = Query(..., description="Status ID"),
+                      timestamp: int = Query(..., description="Timestamp"),
+                      facility_id: str = Query(..., description="Facility ID")):
+    """
+    Creates a user visit record with the provided information.
+
+    Args:
+        user_id (int): The ID of the user for whom the visit is being created.
+        status_id (int): The ID of the status of the visit.
+        timestamp (str): The timestamp of the visit.
+        facility_id (str): The ID of the facility where the visit took place.
+
+    Returns:
+        dict: The response from the database after creating the user visit record.
+    """
+    try:
+        timestamp = datetime.fromtimestamp(timestamp, tz=timezone.utc).strftime('%Y-%m-%d')
+        response = supabase_client.supabase.table("user_visit").insert({
+            "user_id": user_id,
+            "status_id": status_id,
+            "timestamp": timestamp,
+            "facility_id": facility_id
+        }).execute()
+        return response
+    except Exception as e:
+        return error.error_500(e, f"An error occurred while trying to create a user_visit: {str(e)}")
+    
+
+@router.post("/user_visits", tags=["laboratories"])
+async def user_visits(user_id: int = Query(..., description="User ID")):
+    """
+    Retrieves user visits from the database.
+
+    Args:
+        user_id (int): The ID of the user for whom to retrieve visits.
+
+    Returns:
+        dict: The response containing user visits.
+            If no visits are found, returns a 404 error message.
+    """
+    try:
+        response = supabase_client.supabase.table("user_visit").select("status_id", "timestamp", "facility_id").eq("user_id", user_id).execute()
+        if response.data == []:
+           error.error_404(f"No scheduled visit found") 
+        else:
+            return response
+    except Exception as e:
+        return error.error_500(e, f"An error occurred while trying to retrieve data from the database: {str(e)}")

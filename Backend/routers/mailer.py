@@ -1,87 +1,19 @@
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel, EmailStr
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-import random
-from cachetools import TTLCache
+from fastapi import APIRouter, HTTPException, Query
+from pydantic import EmailStr
 from Backend.other.logger_file import logger
 from Backend.other.error import Error
-
+from Backend.other.models import EmailSchema
+from Backend.managers.mailer_manager import authenticate_user, EmailService
+from Backend.base.supa_client import supabase_client
+from Backend.other.hashing_password import hash_password
+from datetime import datetime, timezone
 
 router = APIRouter()
-
-
-class EmailService:
-    def __init__(self):
-        """
-        Initializes the EmailService with default values for sender email, sender password,
-        and a TTL cache for verification codes.
-        """
-        self.sender_email = 'spanchak228@gmail.com'
-        self.sender_password = 'zwne hugo slfv dacq'
-        self.verification_codes = TTLCache(maxsize=100, ttl=300)
-
-    def generate_verification_code(self):
-        """
-        Generates a random six-digit verification code.
-
-        Returns:
-        - str: The generated verification code.
-        """
-        return str(random.randint(100000, 999999))
-
-    def send_email(self, receiver_email, subject, body):
-        """
-        Sends an email with a verification code to the specified receiver email.
-
-        Parameters:
-        - receiver_email (str): The email address of the recipient.
-        - subject (str): The subject of the email.
-        - body (str): The body/content of the email.
-
-        Returns:
-        - dict: A dictionary containing a message indicating whether the email was sent successfully.
-        """
-        smtp_server = smtplib.SMTP("smtp.gmail.com", 587)
-        smtp_server.starttls()
-
-        try:
-            smtp_server.login(self.sender_email, self.sender_password)
-
-            verification_code = self.generate_verification_code()
-            self.verification_codes[receiver_email] = verification_code
-
-            message = MIMEMultipart()
-            message['From'] = self.sender_email
-            message['To'] = receiver_email
-            message['Subject'] = subject
-
-            body_with_code = f"Verification Code: {verification_code}"
-            message.attach(MIMEText(body_with_code, 'plain'))
-
-            smtp_server.sendmail(self.sender_email, receiver_email, message.as_string())
-
-            return {"message": "Email sent successfully"}
-        except Exception as e:
-            logger.error(f"An error occurred: {str(e)}")
-            return Error.error_500(e, 500, f"An error occurred: {str(e)}")
-        finally:
-            smtp_server.quit()
-
-class EmailSchema(BaseModel):
-    """
-    Pydantic model representing the structure of email data.
-    """
-    receiver_email: EmailStr
-    subject: str
-    body: str
+error = Error()
 
 email_service = EmailService()
 
-
 @router.post("/send_email/", tags=["mailer"])
-
 async def send_email(email: EmailSchema):
     """
     Endpoint to send an email with a verification code.
@@ -116,4 +48,77 @@ async def check_email(verification_code: str, receiver_email: EmailStr):
         logger.info(f"Verification successful for {receiver_email}")
         return {"message": "Verification successful"}
     else:
-        return Error.error_404(f"Invalid verification code or email")
+        return error.error_404(f"Invalid verification code or email")
+
+
+@router.post("/login", tags=["mailer"])
+async def login(email: str = Query(..., description="User email"), 
+                password: str = Query(..., description="User password")):
+    """
+    Logs in a user with the provided credentials.
+
+    Args:
+        email (str): The user's email.
+        password (str): The user's password.
+
+    Returns:
+        dict: A message indicating whether the login was successful.
+    """
+    try:
+        if not authenticate_user(email, password):
+            return error.error_404(f"Invalid password or email")
+        logger.info(f"Login successful")
+        return {"message": "Login successful"}
+    except Exception as e:
+        return error.error_500(e, f"An error occurred while trying to identify the user: {str(e)}")
+
+
+@router.post("/users", tags=["mailer"])
+async def add_user(email: str = Query(..., description="User email"),
+                    password: str = Query(..., description="User password")):
+    """
+    Adds a new user to the database.
+
+    Args:
+        email (str): The user's email.
+        password (str): The user's password.
+
+    Returns:
+        dict: The response from the database after adding the user.
+    """
+    try:
+        hashed_password = hash_password(password)
+        response = supabase_client.supabase.table("password_with_mail").insert({"mail": email, "password": hashed_password}).execute()
+        return response
+    except Exception as e:
+        return error.error_500(e, f"An error occurred when trying to add a user to the database: {str(e)}")
+
+
+@router.post("/create_profile", tags=["mailer"])
+async def create_user(name: str = Query(..., description="User name"),
+                      sex_id: int = Query(..., description="User sex ID"),
+                      email: str = Query(..., description="User email"),
+                      birth_day_timestamp: int = Query(..., description="User birth day as Unix timestamp")):
+    """
+    Creates a user profile with the provided information.
+
+    Args:
+        name (str): The user's name.
+        sex_id (int): The user's sex ID.
+        email (str): The user's email.
+        birth_day_timestamp (int): The user's birth day as Unix timestamp.
+
+    Returns:
+        dict: The response from the database after creating the user profile.
+    """
+    try:
+        birth_day = datetime.fromtimestamp(birth_day_timestamp, tz=timezone.utc).strftime('%Y-%m-%d')
+        response = supabase_client.supabase.table("user").insert({
+            "name": name,
+            "sex_id": sex_id,
+            "email": email,
+            "birth_day": birth_day
+        }).execute()
+        return response
+    except Exception as e:
+        return error.error_500(e, f"An error occurred while trying to create a user: {str(e)}")
