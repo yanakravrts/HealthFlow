@@ -4,10 +4,12 @@ from supabase import create_client
 from Backend.other.error import Error
 from Backend.other.logger_file import logger
 from fastapi import Request, APIRouter
+
 from Backend.managers.file_manager import extract_text_from_pdf
 from Backend.base.supa_client import SupabaseDBClient, settings
 
 # supabase = SupabaseDBClient(config=settings)
+
 
 router = APIRouter()
 error = Error()
@@ -69,7 +71,7 @@ async def get_file(file_name: str):
         if len(response) == 0:
             return error.error_404(f"Error downloading file from Supabase")  
         file_content = response
-        text = await extract_text_from_pdf(file_content)
+        text = await extract_table_from_pdf(file_content)
         if not text:
             return error.error_404(f"PDF file does not contain any text")
         logger.info("Extracted text from PDF")
