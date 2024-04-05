@@ -1,5 +1,5 @@
-from other.models import Point
-from managers.geo_manager import points_in_radius
+from Backend.other.models import Point
+from Backend.managers.geo_manager import points_in_radius
 import unittest
 
 
