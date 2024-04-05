@@ -6,6 +6,7 @@ import unittest
 
 class TestSupabaseDBClient(unittest.TestCase):
     @patch('Backend.base.supa_client.create_client')
+
     def test_connect_success(self, mock_create_client):
         mock_create_client.return_value = MagicMock()
         settings = Settings(SUPABASE_URL='mock_url', SUPABASE_KEY='mock_key')
@@ -14,6 +15,7 @@ class TestSupabaseDBClient(unittest.TestCase):
         self.assertFalse(connection_result.has_error)
         self.assertEqual(connection_result.notification, "Connected successfully")
         self.assertEqual(connection_result.status, 200)
+
 
     @patch('Backend.base.supa_client.create_client')
     def test_connect_failure(self, mock_create_client):
