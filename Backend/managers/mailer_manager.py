@@ -11,6 +11,7 @@ from Backend.other.hashing_password import hash_password
 
 error = Error()
 
+
 def authenticate_user(email: str, password: str):
     """
     Authenticate user based on provided email and password.
@@ -34,7 +35,7 @@ def authenticate_user(email: str, password: str):
     except Exception as e:
         print(f"Error: {e}")
         return False
-    
+
 
 class EmailService:
     def __init__(self):
@@ -92,4 +93,3 @@ class EmailService:
             return Error.error_500(e, 500, f"An error occurred: {str(e)}")
         finally:
             smtp_server.quit()
-

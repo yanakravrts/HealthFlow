@@ -1,5 +1,6 @@
 import hashlib
 
+
 # Функція для хешування паролю
 def hash_password(password: str) -> str:
     # Використовуємо sha256 для хешування паролю

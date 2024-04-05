@@ -15,5 +15,5 @@ async def extract_text_from_pdf(file_content: bytes) -> str:
     with pdfplumber.open(io.BytesIO(file_content)) as pdf:
         text = ""
         for page in pdf.pages:
-            text += page.extract_text(layout = True)
+            text += page.extract_text(layout=True)
     return text

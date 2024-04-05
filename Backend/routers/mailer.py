@@ -13,6 +13,7 @@ error = Error()
 
 email_service = EmailService()
 
+
 @router.post("/send_email/", tags=["mailer"])
 async def send_email(email: EmailSchema):
     """
@@ -48,11 +49,11 @@ async def check_email(verification_code: str, receiver_email: EmailStr):
         logger.info(f"Verification successful for {receiver_email}")
         return {"message": "Verification successful"}
     else:
-        return error.error_404(f"Invalid verification code or email")
+        return error.error_404("Invalid verification code or email")
 
 
 @router.post("/login", tags=["mailer"])
-async def login(email: str = Query(..., description="User email"), 
+async def login(email: str = Query(..., description="User email"),
                 password: str = Query(..., description="User password")):
     """
     Logs in a user with the provided credentials.
@@ -66,8 +67,8 @@ async def login(email: str = Query(..., description="User email"),
     """
     try:
         if not authenticate_user(email, password):
-            return error.error_404(f"Invalid password or email")
-        logger.info(f"Login successful")
+            return error.error_404("Invalid password or email")
+        logger.info("Login successful")
         return {"message": "Login successful"}
     except Exception as e:
         return error.error_500(e, f"An error occurred while trying to identify the user: {str(e)}")
@@ -75,7 +76,7 @@ async def login(email: str = Query(..., description="User email"),
 
 @router.post("/users", tags=["mailer"])
 async def add_user(email: str = Query(..., description="User email"),
-                    password: str = Query(..., description="User password")):
+                   password: str = Query(..., description="User password")):
     """
     Adds a new user to the database.
 

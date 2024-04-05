@@ -5,15 +5,18 @@ from supabase._sync.client import SupabaseException
 
 load_dotenv()
 
+
 class Settings(BaseSettings):
     SUPABASE_URL: str
     SUPABASE_KEY: str
+
 
 class Connection:
     def __init__(self, has_error: bool, notification: str, status: int):
         self.has_error = has_error
         self.notification = notification
         self.status = status
+
 
 class SupabaseDBClient:
     def __init__(self, config):

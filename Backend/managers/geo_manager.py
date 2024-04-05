@@ -3,6 +3,7 @@ from Backend.other.error import Error
 
 error = Error()
 
+
 def haversine(lat1, lon1, lat2, lon2):
     """
     This function calculates the distance between two points on the Earth's surface using the Haversine formula.

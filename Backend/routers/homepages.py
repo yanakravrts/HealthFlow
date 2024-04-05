@@ -34,7 +34,6 @@ async def burger(profile_id: str):
         return error.error_500(e, "Internal Server Error")
 
 
-
 @router.post("/burger/update_profile", tags=["homepages"])
 async def update_user_profile(user_id: int = Query(..., description="User ID"),
                               name: str = Query(None, description="User name"),
@@ -73,7 +72,6 @@ async def update_user_profile(user_id: int = Query(..., description="User ID"),
 
 
 @router.get("/burger/help", response_model=HelpResponse, tags=["homepages"])
-
 async def help(question: str = Query(..., title="Your Question", description="Please enter your question here")):
     """
     Accepts a question from the user.
@@ -92,7 +90,6 @@ async def help(question: str = Query(..., title="Your Question", description="Pl
             return JSONResponse(content={"text": "Thank you, we will look into your question"})
     except Exception as e:
         return error.error_500(e, "Internal Server Error")
-    
 
 
 @router.get("/burger/blood_donation_centers/", response_model=BloodDonationCentersResponse, tags=["homepages"])
@@ -103,25 +100,23 @@ async def get_blood_donation_centers(blood_group: str = Query(..., title="Blood 
 
         response = supabase_client.supabase.table("blood_need").select("bank_id").eq("blood_type", blood_group).execute()
         bank_ids = [data["bank_id"] for data in response.data]
-        
+
         blood_donation_centers = []
         for bank_id in bank_ids:
             response = supabase_client.supabase.table("blood_bank").select("name", "address", "company", "latitude", "longitude", "status_id").eq("id", bank_id).execute()
             bank_data = response.data[0]
             blood_donation_centers.append(bank_data)
-        
+
         if not blood_donation_centers:
             return error.error_404("No blood donation centers found for the specified blood group")
         else:
-            logger.info(f"Banks of blood found")
+            logger.info("Banks of blood found")
             return {"blood_donation_centers": blood_donation_centers}
     except Exception as e:
         return error.error_500(e, "Internal Server Error")
-    
-    
+
 
 @router.get("/burger/AboutAS", response_model=AboutAs, tags=["homepages"])
-
 async def about_as():
     """
     Retrieves information about the HealthFlow app and its creators.
@@ -136,7 +131,6 @@ async def about_as():
         return JSONResponse(content={"text": "The HealthFlow app was created by the Elysian team..."})
     except Exception as e:
         return error.error_500(e, "Internal Server Error")
-    
 
 
 @router.get("/", response_model=List[Article], tags=["homepages"])
@@ -165,7 +159,6 @@ async def home():
 
 
 @router.get("/article/{article_id}", tags=["homepages"])
-
 def read_article(article_id: int):
     """
     Retrieves details of a specific article based on its ID.
@@ -190,10 +183,9 @@ def read_article(article_id: int):
         return error.error_404("Article not found")
     except Exception as e:
         return error.error_500(e, "Internal Server Error")
-    
+
 
 @router.get("/article/go_to_external_link/{article_id}", tags=["homepages"])
-
 async def go_to_external_link(article_id: int):
     """
     Redirects the user to an external link associated with a specific article based on its ID.
@@ -215,7 +207,6 @@ async def go_to_external_link(article_id: int):
             return error.error_404("Article with ID {article_id} not found")
     except Exception as e:
         return error.error_500(e, "Internal Server Error")
-    
 
 
 # @app.get("/burger/change_profile/go_back")
@@ -225,7 +216,7 @@ async def go_to_external_link(article_id: int):
 #         return RedirectResponse(url="/burger", status_code=302)
 #     except Exception as e:
 #         return error.error_500(e, "Internal Server Error")
-    
+
 
 # @app.get("/burger/help/go_back")
 # async def go_back():
@@ -234,8 +225,8 @@ async def go_to_external_link(article_id: int):
 #         return RedirectResponse(url="/burger", status_code=302)
 #     except Exception as e:
 #         return error.error_500(e, "Internal Server Error")
-    
-    
+
+
 # @app.get("/burger/about_us/go_back")
 # async def go_back():
 #     try:
@@ -243,8 +234,8 @@ async def go_to_external_link(article_id: int):
 #         return RedirectResponse(url="/burger", status_code=302)
 #     except Exception as e:
 #         return error.error_500(e, "Internal Server Error")
-    
-    
+
+
 # @app.get("/burger/article/go_back")
 # async def go_back():
 #     try:
@@ -270,7 +261,7 @@ async def go_to_external_link(article_id: int):
 #         return JSONResponse(content={"current_datetime": current_datetime})
 #     except Exception as e:
 #         return error.error_500(e, "Internal Server Error")
-    
+
 
 # @app.post("/calendar/add_event", response_model= Event)
 # async def add_event(event: Event):

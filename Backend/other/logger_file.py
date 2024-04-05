@@ -1,5 +1,6 @@
 import logging
 
+
 class MyLogger:
     def __init__(self, name, level=logging.DEBUG):
         self.logger = logging.getLogger(name)
@@ -25,5 +26,6 @@ class MyLogger:
 
     def critical(self, message, *args, **kwargs):
         self.logger.critical(message, *args, **kwargs)
+
 
 logger = MyLogger(__name__)
