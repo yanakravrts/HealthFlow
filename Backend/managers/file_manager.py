@@ -19,5 +19,3 @@ async def extract_table_from_pdf(file_content: bytes) -> list:
                 for row in table:
                     print(row)
     return table
-
-a = 2
