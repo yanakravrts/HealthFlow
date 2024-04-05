@@ -4,8 +4,7 @@ from supabase import create_client
 from Backend.other.error import Error
 from Backend.other.logger_file import logger
 from fastapi import Request, APIRouter
-
-from Backend.managers.file_manager import extract_text_from_pdf
+from Backend.managers.file_manager import extract_table_from_pdf
 
 
 # supabase = SupabaseDBClient(config=settings)
@@ -66,6 +65,7 @@ async def get_file(file_name: str):
     """
     try:
         response = supabase.storage.from_("file").download(file_name)
+
         if len(response) == 0:
             return error.error_404("Error downloading file from Supabase")
         file_content = response
