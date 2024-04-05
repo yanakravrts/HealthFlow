@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import MagicMock, patch
-from managers.file_manager import extract_text_from_pdf
+from Backend.managers.file_manager import extract_table_from_pdf
 
 
 @pytest.mark.asyncio
@@ -16,7 +16,7 @@ async def test_extract_text_from_pdf():
 
         mock_pdfplumber_open.return_value.__enter__.return_value = mock_pdf
 
-        extracted_text = await extract_text_from_pdf(b"")
+        extracted_text = await extract_table_from_pdf(b"")
 
         assert extracted_text == "Text from page 1Text from page 2Text from page 3"
         mock_pdfplumber_open.assert_called_once_with(mock_bytesio.return_value)
