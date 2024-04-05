@@ -1,4 +1,4 @@
-from app.routers.laboratories import Point
+from Backend.routers.laboratories import Point
 from managers.geo_manager import points_in_radius
 import unittest
 
