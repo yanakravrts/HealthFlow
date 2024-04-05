@@ -7,3 +7,4 @@ pydantic[email]==2.5.3
 pydantic-settings==2.1.0
 supabase==2.3.4
 pdfplumber==0.10.3
+pytest==8.0.1
