@@ -12,9 +12,7 @@ error = Error()
 router = APIRouter()
 
 
-
 @router.post("/laboratories", tags=["laboratories"])
-
 async def add_event(region: str = Query(..., description="Name of the region"),
                     center_lat: float = Query(..., description="Latitude of the center point"),
                     center_lon: float = Query(..., description="Longitude of the center point"),
@@ -39,12 +37,12 @@ Returns:
     try:
 
         if radius < 0:
-            return Error.error_400(f"Radius cannot be negative")
+            return Error.error_400("Radius cannot be negative")
 
         response = supabase_client.supabase.table("laboratory") \
             .select("id", "name", "latitude", "longitude") \
             .eq("region", region).execute()
-        
+
         data = response.model_dump_json()
         lab_data = [Point(id=item["id"], name=item["name"], latitude=item["latitude"], longitude=item["longitude"]) for
                     item in json.loads(data)["data"]]
@@ -52,8 +50,8 @@ Returns:
         result = points_in_radius(center_lat, center_lon, radius, lab_data)
 
         if not result:
-            error.error_404(f"No laboratories found within the specified radius")
-        print(time()- start," worktime")
+            error.error_404("No laboratories found within the specified radius")
+        print(time() - start, " worktime")
         return result
     except Exception as e:
         error.error_500(e, f"An error occurred while retrieving laboratories within radius: {e}")
@@ -61,9 +59,9 @@ Returns:
 
 @router.post("/create_visit", tags=["laboratories"])
 async def create_user_visit(user_id: int = Query(..., description="User ID"),
-                      status_id: int = Query(..., description="Status ID"),
-                      timestamp: int = Query(..., description="Timestamp"),
-                      facility_id: str = Query(..., description="Facility ID")):
+                            status_id: int = Query(..., description="Status ID"),
+                            timestamp: int = Query(..., description="Timestamp"),
+                            facility_id: str = Query(..., description="Facility ID")):
     """
     Creates a user visit record with the provided information.
 
@@ -87,7 +85,7 @@ async def create_user_visit(user_id: int = Query(..., description="User ID"),
         return response
     except Exception as e:
         return error.error_500(e, f"An error occurred while trying to create a user_visit: {str(e)}")
-    
+
 
 @router.post("/user_visits", tags=["laboratories"])
 async def user_visits(user_id: int = Query(..., description="User ID")):
@@ -104,7 +102,7 @@ async def user_visits(user_id: int = Query(..., description="User ID")):
     try:
         response = supabase_client.supabase.table("user_visit").select("status_id", "timestamp", "facility_id").eq("user_id", user_id).execute()
         if response.data == []:
-           error.error_404(f"No scheduled visit found") 
+            error.error_404("No scheduled visit found")
         else:
             return response
     except Exception as e:

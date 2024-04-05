@@ -3,6 +3,7 @@ from routers.mailer import EmailService, send_email, check_email, EmailSchema
 import unittest
 from unittest.mock import patch, MagicMock
 
+
 class TestEmailService(unittest.TestCase):
     @patch('smtplib.SMTP')
     def test_send_email_success(self, mock_smtp):

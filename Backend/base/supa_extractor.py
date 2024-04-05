@@ -2,12 +2,12 @@ from Backend.base.supa_client import SupabaseDBClient, settings
 from supabase._sync.client import SupabaseException
 from postgrest.exceptions import APIError
 
+
 def fetch_data_from_supabase():
     supabase_client = SupabaseDBClient(config=settings)
     table_name = 'sx'
 
     try:
-        connection_result = supabase_client.connect()
         response = supabase_client.supabase.table(table_name).select("*").execute()
 
         if response is not None and response.data is not None:
@@ -31,6 +31,7 @@ def fetch_data_from_supabase():
 
     # Return None in case of an error
     return {"error": "Unknown error occurred."}
+
 
 data = fetch_data_from_supabase()
 print(data)

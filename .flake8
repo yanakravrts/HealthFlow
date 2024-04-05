@@ -1,0 +1,5 @@
+[flake8]
+# включення і виключення правил
+; ignore = E226,E302,E41, F541, E128, W291
+max-line-length = 170
+exclude = Backend/.pytest_cache, */__init__.py, *__pycache__

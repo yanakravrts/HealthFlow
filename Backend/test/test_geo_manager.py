@@ -15,7 +15,7 @@ class TestPointInRadius(unittest.TestCase):
             Point(id=4, name='lab4', latitude=48.2914, longitude=21.2312),
             Point(id=5, name='lab5', latitude=51.2367, longitude=25.9352)
         ]
-    
+
     def test_point_in_radius(self):
         test_cases = {
             0: [],
@@ -27,8 +27,4 @@ class TestPointInRadius(unittest.TestCase):
         for radius, expected in test_cases.items():
             with self.subTest(radius=radius):
                 result = points_in_radius(self.central_lat, self.central_lon, radius, self.lab_data)
-                self.assertEqual(result, expected)  
-
-
-
-
+                self.assertEqual(result, expected)
