@@ -1,6 +1,8 @@
 from Backend.routers.laboratories import Point
 from Backend.managers.geo_manager import points_in_radius
 import unittest
+from Backend.main import app
+from fastapi.testclient import TestClient
 
 
 class TestPointInRadius(unittest.TestCase):
