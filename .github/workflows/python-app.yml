@@ -1,0 +1,24 @@
+
+name: HealthFlow
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      TEST1: ${{ secrets.TEST1 }}
+      TEST2: ${{ secrets.TEST2 }}
+      heroku_api_key: 123
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install dependencies
+      run: |
+        printenv
