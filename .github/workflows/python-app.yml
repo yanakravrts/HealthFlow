@@ -17,6 +17,11 @@ jobs:
       SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
     steps:
     - uses: actions/checkout@v3
+    - name: Check SUPABASE_URL
+      run: echo "SUPABASE_URL is $SUPABASE_URL"
+        
+    - name: Check SUPABASE_KEY
+      run: echo "SUPABASE_KEY is $SUPABASE_KEY
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
