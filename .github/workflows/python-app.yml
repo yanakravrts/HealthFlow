@@ -28,16 +28,16 @@ jobs:
     - name: Lint with flake8
       run: |
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=170 --statistics
-    # - name: Test with pytest
-    #   run: |
-    #     if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    #     pip install pytest
-    #     python -m pytest Backend/test/
-    - name: Deploy to Heroku
+    - name: Test with pytest
       run: |
-        heroku git:remote -a health-flow
-    - uses: akhileshns/heroku-deploy@v3.13.15
-      with:
-        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-        heroku_app_name: "health-flow" 
-        heroku_email: "yanakravrts@gmail.com"
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        pip install pytest
+        python -m pytest Backend/test/
+    # - name: Deploy to Heroku
+    #   run: |
+    #     heroku git:remote -a health-flow
+    # - uses: akhileshns/heroku-deploy@v3.13.15
+    #   with:
+    #     heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+    #     heroku_app_name: "health-flow" 
+    #     heroku_email: "yanakravrts@gmail.com"
