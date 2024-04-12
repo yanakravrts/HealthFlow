@@ -14,11 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Print SUPABASE_URL and SUPABASE_KEY
-      env:
-        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-        SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+    - name: Use SUPABASE_URL and SUPABASE_KEY in another step
       run: |
+          # Використання значень SUPABASE_URL та SUPABASE_KEY у цьому кроці
           echo "SUPABASE_URL: ${{ env.SUPABASE_URL }}"
           echo "SUPABASE_KEY: ${{ env.SUPABASE_KEY }}"
     # - name: Install dependencies
