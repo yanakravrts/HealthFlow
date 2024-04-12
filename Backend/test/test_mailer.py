@@ -1,7 +1,8 @@
 import asyncio
-from routers.mailer import EmailService, send_email, check_email, EmailSchema
+from Backend.routers.mailer import EmailService, send_email, check_email, EmailSchema
 import unittest
 from unittest.mock import patch, MagicMock
+
 
 class TestEmailService(unittest.TestCase):
     @patch('smtplib.SMTP')
@@ -18,7 +19,7 @@ class TestEmailService(unittest.TestCase):
         mock_smtp_instance.sendmail.assert_called_once()
         mock_smtp_instance.quit.assert_called_once()
 
-    @patch('Backend.app.routers.mailer.email_service')
+    @patch('Backend.routers.mailer.email_service')
     def test_send_email_and_check_email_endpoints(self, mock_email_service):
         # Тестування відправки email
         mock_email_service.send_email.return_value = {"message": "Email sent successfully"}

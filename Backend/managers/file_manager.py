@@ -2,18 +2,20 @@ import io
 import pdfplumber
 
 
-async def extract_text_from_pdf(file_content: bytes) -> str:
+async def extract_table_from_pdf(file_content: bytes) -> list:
     """
-    Extracts text from a PDF file represented as bytes.
+    Extracts table from a PDF file represented as bytes.
 
     Arguments:
     - file_content: Bytes representing the content of the PDF file.
 
     Returns:
-    - Extracted text from the PDF file as a string.
+    - Extracted table from the PDF file as a list.
     """
     with pdfplumber.open(io.BytesIO(file_content)) as pdf:
-        text = ""
         for page in pdf.pages:
-            text += page.extract_text(layout = True)
-    return text
+            table = page.extract_table()
+            if table:
+                for row in table:
+                    print(row)
+    return table
