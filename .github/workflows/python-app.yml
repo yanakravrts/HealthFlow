@@ -33,6 +33,10 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         pip install pytest
         python -m pytest Backend/test/
+    # - name: Print SUPABASE_URL and SUPABASE_KEY
+    #   run: |
+    #     echo "SUPABASE_URL: $SUPABASE_URL"
+    #     echo "SUPABASE_KEY: $SUPABASE_KEY"
     # - name: Deploy to Heroku
     #   run: |
     #     heroku git:remote -a health-flow
