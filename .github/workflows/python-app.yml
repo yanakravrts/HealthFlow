@@ -14,8 +14,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+      TEST1: ${{ secrets.TEST1 }}
+      TEST2: ${{ secrets.TEST2 }}
       heroku_api_key: 123
     steps:
     - uses: actions/checkout@v3
