@@ -12,7 +12,14 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
     steps:
+    - name: Print SUPABASE_URL and SUPABASE_KEY
+      run: |
+          echo "SUPABASE_URL: $SUPABASE_URL"
+          echo "SUPABASE_KEY: $SUPABASE_KEY"
     - uses: actions/checkout@v3
     - name: Use SUPABASE_URL and SUPABASE_KEY in another step
       run: |
