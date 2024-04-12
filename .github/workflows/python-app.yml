@@ -26,6 +26,7 @@ jobs:
           # Використання значень SUPABASE_URL та SUPABASE_KEY у цьому кроці
           echo "SUPABASE_URL: ${{ secrets.SUPABASE_URL }}"
           echo "SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}"
+          printenv
     # - name: Install dependencies
     #   run: |
     #     python -m pip install --upgrade pip
