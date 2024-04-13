@@ -1,4 +1,5 @@
-name: Приклад GitHub Actions з секретними змінними
+
+name: Приклад GitHub Actions з умовою
 
 on:
   push:
@@ -8,12 +9,19 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      MY_VARIABLE: 123
 
     steps:
     - name: Клонувати репозиторій
       uses: actions/checkout@v2
-      
+
     - name: Виконати мій скрипт
       run: |
         echo "Моя секретна змінна TEST1: ${{ secrets.TEST1 }}"
         echo "Моя секретна змінна TEST2: ${{ secrets.TEST2 }}"
+        if [ "${{ env.MY_VARIABLE }}" = "${{ secrets.TEST1 }}" ]; then
+          echo "True"
+        else
+          echo "False"
+        fi
