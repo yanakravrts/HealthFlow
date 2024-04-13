@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'article.dart';
 import 'Profile.dart';
 import 'blood_bank.dart';
-import 'Existfile.dart';
+import 'homepage.dart';
+import 'upload.dart';
 import 'noevent.dart';
-
+import 'statistic.dart';
 void main() {
   runApp(MyApp());
 }
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomePage(),
+      home: NofilePage(),
     );
   }
 }
@@ -42,13 +42,13 @@ class Elipse extends StatelessWidget {
   }
 }
 
-class HomePage extends StatefulWidget {
+class NofilePage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _NofileState createState() => _NofileState();
 }
 
 
-class _HomePageState extends State<HomePage> {
+class _NofileState extends State<NofilePage> {
   bool _menuVisibility = false;
 
 
@@ -78,122 +78,51 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Positioned(
-            top: 88,
-            left: 205,
-            child: InkWell(
-              onTap: () {
-                print('My Tips Clicked');
-              },
-              child: Container(
-                width: 217,
-                height: 55,
-                decoration: BoxDecoration(),
-                child: Center(
-                  child: Text(
-                    'Поради',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Roboto Flex',
-                      fontSize: 32,
-                      height: 1.4,
-                      letterSpacing: 0,
-                    ),
-                  ),
+            top: 158,
+            left: 0,
+            right: 0,
+            height: 200,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                RoundButton(
+                  "Додати документи",
+                      () {
+                    {Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => UploadPage()),
+                    );}
+                  },
+                  width: 248, // Встановіть бажану ширину
                 ),
-              ),
+                RoundButton(
+                  "Статистика",
+                      () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => StatisticsPage()),
+                    );
+                  },
+                  width: 248, // Set desired width
+                ),
+
+              ],
             ),
           ),
+
+
           Positioned(
-            top: 167,
-            left: 34,
-            child: InkWell(
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ArticlePage()));
-                print('Topic 1 Clicked');
-              },
-              child: Container(
-                width: 350,
-                height: 190,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  image: DecorationImage(
-                    image: AssetImage('assets/topic1.jpg'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Align(
-                    alignment: FractionalOffset.bottomLeft,
-                    child: Text(
-                      'Проливаємо світло на агресивний рак мозку',
-                      style: TextStyle(
-                        fontFamily: 'Roboto Flex',
-                        fontSize: 25,
-                        fontWeight: FontWeight.w800,
-                        color: Color.fromRGBO(245, 245, 245, 1),
-                        height: 1.4,
-                        letterSpacing: 0,
-                        shadows: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.5),
-                            blurRadius: 5,
-                            offset: Offset(0, 0),
-                          ),
-                        ],
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                ),
-              ),
+            top: 284,
+            left: -55,
+            width: 522,
+            height: 379,
+            child: Transform.scale(
+              scale: 1,
+              child: Image.asset('assets/file.png', width: 100, height: 100),
             ),
           ),
-          Positioned(
-            top: 401,
-            left: 35,
-            child: InkWell(
-              onTap: () {
-                print('Topic 2 Clicked');
-              },
-              child: Container(
-                width: 353,
-                height: 190,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  image: DecorationImage(
-                    image: AssetImage('assets/topic2.jpg'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Align(
-                    alignment: FractionalOffset.bottomLeft,
-                    child: Text(
-                      'Відновлення зору незрячим за допомогою новітніх мозкових імплантатів',
-                      style: TextStyle(
-                        fontFamily: 'Roboto Flex',
-                        fontSize: 25,
-                        fontWeight: FontWeight.w800,
-                        color: Color.fromRGBO(245, 245, 245, 1),
-                        height: 1.4,
-                        letterSpacing: 0,
-                        shadows: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.5),
-                            blurRadius: 5,
-                            offset: Offset(0, 0),
-                          ),
-                        ],
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
+          //
+
           Positioned(
             top: 746,
             left: -187,
@@ -209,7 +138,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Positioned(
             top: 646,
-            left: -58,
+            left: 130,
             child: InkWell(
               onTap: () {
                 print('Elipse Home Clicked');
@@ -222,7 +151,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Positioned(
             top: 736,
-            left: 36,
+            left: 225,
             child: InkWell(
               onTap: () {
                 print('Elips Home Clicked');
@@ -233,9 +162,10 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
+
           Positioned(
-            top: 585,
-            left: -12,
+            top: 587,
+            left: -80,
             child: InkWell(
               onTap: () {
                 Navigator.push(
@@ -251,34 +181,34 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Positioned(
-            top: 775,
-            left: 73,
+            top: 793,
+            left: 30,
             child: InkWell(
-              onTap: null,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                );
+                print('Home Clicked');
+              },
               child: Transform.scale(
-                scale: 0.5,
+                scale: 0.59,
                 child: Image.asset('assets/home.jpg'),
               ),
             ),
           ),
           Positioned(
-            top: 780,
-            left: 310,
+            top: 765,
+            left: 268,
             child: InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => NofilePage()),
-                );
-                print('Probirka Clicked');
-              },
+              onTap: null,
               child: Transform.scale(
                 scale: 0.5,
                 child: Image.asset('assets/probirka.jpg'),
               ),
             ),
           ),
-        if(_menuVisibility) CustomMyRectangle()
+          if(_menuVisibility) CustomMyRectangle()
         ],
       ),
     );
@@ -286,6 +216,45 @@ class _HomePageState extends State<HomePage> {
   }
 
 }
+
+class RoundButton extends StatelessWidget {
+  final String text;
+  final VoidCallback onPressed;
+  final double width;
+  final Color backgroundColor;
+  final Color textColor;
+
+  RoundButton(
+      this.text,
+      this.onPressed, {
+        this.width = 200,
+        this.backgroundColor = const Color.fromRGBO(34, 151, 161, 1),
+        this.textColor = Colors.white,
+      });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width,
+      height: 70,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        child: Text(
+          text,
+          style: TextStyle(color: textColor,
+            fontFamily: 'Roboto Flex',
+            fontSize: 22,
+            fontWeight: FontWeight.w400,),
+        ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: backgroundColor,
+        ),
+      ),
+    );
+  }
+}
+
+
 
 class CustomMyRectangle extends StatelessWidget {
   @override
@@ -301,29 +270,29 @@ class CustomMyRectangle extends StatelessWidget {
         color: const Color.fromRGBO(245, 245, 245, 1),
         child: Stack(
           children: [
-          Positioned(
-            top: 60,
-            left: -5,
-            child: Transform.scale(
-              scale: 0.7,
-              child: Elipse(
-                width: 150,
-                height: 130,
-                color: Colors.blue,
+            Positioned(
+              top: 60,
+              left: -5,
+              child: Transform.scale(
+                scale: 0.7,
+                child: Elipse(
+                  width: 150,
+                  height: 130,
+                  color: Colors.blue,
+                ),
               ),
             ),
-          ),
-          Positioned(
-            top: -33,
-            left: -55,
-            child: Transform.scale(
-              scale: 0.61,
-              child: Image.asset(
-                'assets/4.png',
-                fit: BoxFit.cover,
+            Positioned(
+              top: -33,
+              left: -55,
+              child: Transform.scale(
+                scale: 0.61,
+                child: Image.asset(
+                  'assets/4.png',
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
             Positioned(
               top: 100,
               left: 135,
@@ -346,7 +315,7 @@ class CustomMyRectangle extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
+                    MaterialPageRoute(builder: (context) => NofilePage()),
                   );
                   print('Back button clicked');
                 },
