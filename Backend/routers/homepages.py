@@ -143,14 +143,14 @@ async def home():
     """
     try:
         num_articles = 2
-        response = supabase_client.supabase.table("article").select("id", "title", "photo", "link", "timestamp").execute()
+        response = supabase_client.supabase.table("article").select("id", "title", "photo", "link", "timestamp", "text").execute()
         articles_data = response.data
         if articles_data:
             sorted_articles = sorted(articles_data, key=lambda x: x["timestamp"], reverse=True)
             selected_articles = sorted_articles[:num_articles]
             articles = []
             for article in selected_articles:
-                articles.append(Article(title=article["title"], image=article["photo"]))
+                articles.append(Article(title=article["title"], image=article["photo"], text=article["text"]))
             return articles
         else:
             return error.error_404("Not enough articles available")
