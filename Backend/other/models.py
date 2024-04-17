@@ -34,6 +34,7 @@ class Profile(BaseModel):
 class Article(BaseModel):
     title: str
     image: HttpUrl
+    text: str
 
 
 class HelpResponse(BaseModel):
