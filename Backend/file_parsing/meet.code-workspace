@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../../../table_extraction"
+		},
+		{
+			"path": "../.."
+		},
+		{
+			"path": "../../../python_prog"
+		}
+	],
+	"settings": {}
+}
