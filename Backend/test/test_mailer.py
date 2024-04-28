@@ -1,5 +1,5 @@
 import asyncio
-from Backend.routers.mailer import EmailService, send_email, check_email, EmailSchema
+from Backend.routers.mailer import EmailService, send_email, check_email
 import unittest
 from unittest.mock import patch, MagicMock
 
@@ -20,19 +20,42 @@ class TestEmailService(unittest.TestCase):
         mock_smtp_instance.quit.assert_called_once()
 
     @patch('Backend.routers.mailer.email_service')
-    def test_send_email_and_check_email_endpoints(self, mock_email_service):
-        # Тестування відправки email
+    async def test_send_email_success(self, mock_email_service):
+        # Підготовка
         mock_email_service.send_email.return_value = {"message": "Email sent successfully"}
-
-        email_data = EmailSchema(receiver_email="test@example.com", subject="Test Subject", body="Test Body")
-        result_send_email = asyncio.run(send_email(email_data))
+        email_data = {"email": "test@example.com", "subject": "Test Subject", "body": "Test Body"}
+        
+        # Виклик функції
+        result_send_email = await send_email(email_data)
+        
+        # Перевірка результату
         self.assertEqual(result_send_email, {"message": "Email sent successfully"})
+        mock_email_service.send_email.assert_called_once_with(email_data)
 
-        # Тестування перевірки email
-        mock_email_service.verification_codes.get.return_value = "123456"
-        result_check_email_success = asyncio.run(check_email("123456", "test@example.com"))
+    async def test_check_email_success(self):
+        # Підготовка
+        mock_email_service = MagicMock()
+        mock_email_service.verification_codes = {"test@example.com": "123456"}
+        verification_code = "123456"
+        email = "test@example.com"
+        
+        # Виклик функції
+        result_check_email_success = await check_email(verification_code, email)
+        
+        # Перевірка результату
         self.assertEqual(result_check_email_success, {"message": "Verification successful"})
+        mock_email_service.verification_codes.get.assert_called_once_with(email)
 
-        mock_email_service.verification_codes.get.return_value = None
-        result_check_email_failure = asyncio.run(check_email("123456", "test@example.com"))
+    async def test_check_email_failure(self):
+        # Підготовка
+        mock_email_service = MagicMock()
+        mock_email_service.verification_codes = {"test@example.com": "123456"}
+        verification_code = "654321"  # неправильний код
+        email = "test@example.com"
+        
+        # Виклик функції
+        result_check_email_failure = await check_email(verification_code, email)
+        
+        # Перевірка результату
         self.assertEqual(result_check_email_failure.status_code, 404)
+        mock_email_service.verification_codes.get.assert_called_once_with(email)
