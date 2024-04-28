@@ -1,4 +1,3 @@
-import asyncio
 from Backend.routers.mailer import EmailService, send_email, check_email
 import unittest
 from unittest.mock import patch, MagicMock
