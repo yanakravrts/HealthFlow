@@ -2,7 +2,7 @@ import pytesseract
 from PIL import Image
 from detection_of_table import TableDetection
 
-image_path = "/Backend/file_parsing/photo_2024-04-26 23.42.33.jpeg"
+image_path = "/Users/yanakravets/HealthFlow/Backend/file_parsing/photo_2024-04-26 23.42.33.jpeg"
 
 tab_detection = TableDetection(image_path)
 image = tab_detection.process_pdf()

@@ -1,13 +1,11 @@
 import pandas as pd
-from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import train_test_split
-from sklearn.neural_network import MLPClassifier
-from sklearn.feature_extraction.text import CountVectorizer
 import re
 import numpy as np
 import tensorflow as tf 
 from tensorflow import keras
 
+from keras import Sequential
+from keras.layers import LSTM, Dense, Embedding, SpatialDropout1D
 from keras_preprocessing.sequence import pad_sequences
 from keras_preprocessing.text import Tokenizer
 from sklearn.model_selection import train_test_split
@@ -86,12 +84,20 @@ if __name__ == '__main__':
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
+    model = Sequential()
+    model.add(Embedding(max_features, 128))
+    model.add(SpatialDropout1D(0.2))
+    model.add(LSTM(128, dropout=0.2, recurrent_dropout=0.2))
+    model.add(Dense(1, activation='sigmoid'))
 
-clf = MLPClassifier(random_state=42)
-clf.fit(X_train, y_train)
-accuracy = clf.score(X_test, y_test)
-print("Accuracy:", accuracy)
+    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-y_prob = clf.predict(X_test)
-print("Predicted probabilities for the first five examples:")
-print(y_prob[:5])
+    # Training
+    batch_size = 32
+    epochs = 10
+    model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs, validation_data=(X_test, y_test))
+
+    # Evaluation
+    loss, accuracy = model.evaluate(X_test, y_test)
+    print(f'Test Loss: {loss}')
+    print(f'Test Accuracy: {accuracy}')

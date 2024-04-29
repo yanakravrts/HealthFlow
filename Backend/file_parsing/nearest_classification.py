@@ -4,33 +4,86 @@ from sklearn.model_selection import train_test_split
 from sklearn.neighbors import NearestCentroid
 from sklearn.feature_extraction.text import CountVectorizer
 import re
-
-def custom_tokenizer(text):
-
-    number_range_pattern = r'\d+\s*-\s*\d+'
-    unit_pattern = r'\b\w+/\w+\b'
-    word_number_pattern = r'\b\w+\b|\d+'
-    tokens = re.findall(number_range_pattern + '|' + unit_pattern + '|' + word_number_pattern, text)
-    return tokens
+import tensorflow as tf 
+from tensorflow import keras
+import numpy as np
+from keras_preprocessing.sequence import pad_sequences
+from keras_preprocessing.text import Tokenizer
+from sklearn.model_selection import train_test_split
 
 
-analysis_data = pd.read_csv('/Users/yanakravets/HealthFlow/Backend/file_parsing/dataset.csv')
+def load_df(path: str):
+    df = pd.read_csv(path)
 
-# Перетворення категоріальних міток у числовий формат
-label_encoder = LabelEncoder()
+    return df
 
-vectorizer_name = CountVectorizer(tokenizer=custom_tokenizer)
-X_name = vectorizer_name.fit_transform(analysis_data['Назва'])
 
-vectorizer_value = CountVectorizer(tokenizer=custom_tokenizer)
-X_value = vectorizer_value.fit_transform(analysis_data['Значення норми'])
+def tokenize(text: str):
+    DASH = "DASH"
+    NUMBER = "NUMBER"
 
-analysis_data = analysis_data.dropna()
+    text = text.lower()
+    text = text.replace("-", f" {DASH} ")
+    punctuation_pattern = r'[^\w\s]'
+    text = re.sub(punctuation_pattern, ' ', text)
+    text = re.sub(r'\d+', f" {NUMBER} ", text)
+    final_tokens = []
 
-X = pd.concat([pd.DataFrame(X_name.toarray()), pd.DataFrame(X_value.toarray())], axis=1)
-y = analysis_data['Результат']
+    for token in text.split():
+        token = token.strip()
+        if token in [DASH, NUMBER]:
+            final_tokens.append(token)
+        else:
+            final_tokens.extend(list(token))
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    return " ".join(final_tokens)
+
+
+def generate_dataset(df: pd.DataFrame):
+    columns = ['Назва', 'Значення норми', 'Результат']
+    name_column = "Назва" # 0
+    norm_column = "Значення норми" # 1
+    res_column = "Результат" # 2
+
+    texts = []
+    labels = []
+
+    names = df[name_column]
+    for name in names:
+        tokens = tokenize(name)
+        texts.append(tokens)
+        labels.append(0)
+
+    norms = df[norm_column]
+    for norm in norms:
+        tokens = tokenize(norm)
+        texts.append(tokens)
+        labels.append(1)
+
+    results = df[res_column]
+    for res in results:
+        tokens = tokenize(res)
+        texts.append(tokens)
+        labels.append(2)
+
+    df = pd.DataFrame({"x": texts, "y": labels})
+    df.to_csv("updated.csv", index=False)
+
+
+if __name__ == '__main__':
+    data = load_df("Backend/file_parsing/updated.csv")
+    texts = data["x"]
+    labels = data["y"]
+    max_features = 1000
+    maxlen = 200
+
+    tokenizer = Tokenizer(num_words=max_features, split=' ')
+    tokenizer.fit_on_texts(texts)
+    sequences = tokenizer.texts_to_sequences(texts)
+    X = pad_sequences(sequences, maxlen=maxlen)
+    y = np.array(labels)
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 clf = NearestCentroid()
 print(X_train)
