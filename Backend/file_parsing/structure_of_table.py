@@ -62,7 +62,7 @@ class TableRecognition:
             print(f"Box {i + 1}: Row - {row}, Column - {column}")
 
 
-pdf_processor = TableDetection('Backend/file_parsing/photo_2024-04-26 23.42.33.jpeg')
+pdf_processor = TableDetection('Backend/file_parsing/womananalysis.pdf')
 
 cropped_images = pdf_processor.process_pdf()
 

@@ -11,6 +11,7 @@ from sklearn import tree
 from sklearn.metrics import f1_score, precision_score, recall_score, confusion_matrix
 import plotly.figure_factory as ff
 
+
 def load_df(path: str):
     df = pd.read_csv(path)
 
@@ -103,9 +104,12 @@ if __name__ == '__main__':
     #Recall
     recall = recall_score(y_test, y_pred, average=None)
     print("Recall for class:", recall)
+    print(y_test)
+    print(y_pred)
+
 
     #Confusion matrix
-    confusion = confusion_matrix(y_test,y_pred, normalize='all')
+    confusion = confusion_matrix(y_test,y_pred)
     print("Confusion matrix:",confusion)
     num_classes = len(np.unique(y_test))
     fig = ff.create_annotated_heatmap(
