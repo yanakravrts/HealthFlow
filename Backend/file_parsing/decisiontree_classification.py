@@ -8,7 +8,9 @@ from keras_preprocessing.sequence import pad_sequences
 from keras_preprocessing.text import Tokenizer
 from sklearn.model_selection import train_test_split
 from sklearn import tree
-import pickle
+from sklearn.metrics import f1_score, precision_score, recall_score, confusion_matrix
+import plotly.figure_factory as ff
+
 
 def load_df(path: str):
     df = pd.read_csv(path)
@@ -85,9 +87,58 @@ if __name__ == '__main__':
 
     clf = tree.DecisionTreeClassifier()
     clf = clf.fit(X_train,y_train)
+    y_pred = clf.predict(X_test)
+
+    #accuracy
     accuracy = clf.score(X_test, y_test)
     print("Accuracy:", accuracy)
-    y_prob = clf.predict_proba(X_test)
-    print("Predicted probabilities for the first five examples:")
-    print(y_prob[:5])
-    
+
+    #F1 score
+    f1 = f1_score(y_test, y_pred, average='weighted')
+    print("F1 Score:", f1)
+
+    #Precision
+    precision = precision_score(y_test, y_pred, average=None)
+    print("Precision for class:", precision)
+
+    #Recall
+    recall = recall_score(y_test, y_pred, average=None)
+    print("Recall for class:", recall)
+    print(y_test)
+    print(y_pred)
+
+
+    #Confusion matrix
+    confusion = confusion_matrix(y_test,y_pred)
+    print("Confusion matrix:",confusion)
+    num_classes = len(np.unique(y_test))
+    fig = ff.create_annotated_heatmap(
+        z=confusion,
+        x=['Predicted Class ' + str(i) for i in range(num_classes)],
+        y=['True Class ' + str(i) for i in range(num_classes)],
+        colorscale='RdPu',
+        showscale=True
+    )
+
+    fig.update_layout(
+        title='Confusion Matrix',
+        xaxis=dict(title='Predicted Label'),
+        yaxis=dict(title='True Label')
+    )
+
+    fig.show()
+
+    FP = confusion.sum(axis=0) - np.diag(confusion)
+    FN = confusion.sum(axis=1) - np.diag(confusion)
+    TP = np.diag(confusion)
+    TN = confusion.sum() - (FP + FN + TP)
+
+    #False positive
+    FPR = FP / (FP + TN)
+    print("False Positive rate :",FPR)
+
+    #False negative
+    FNR = FN/(TP+FN)
+    print("False negative rate:",FNR)
+
+
