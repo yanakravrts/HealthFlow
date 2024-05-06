@@ -7,14 +7,12 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from Backend.other.logger_file import logger
 from Backend.base.supa_client import supabase_client
-from Backend.other.hashing_password import hash_password
 from jose import JWTError, jwt
 import hashlib
 from passlib.context import CryptContext
 from datetime import datetime, timedelta, timezone
-from fastapi import HTTPException, status, Depends
+from fastapi import HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from typing import Annotated
 import os
 from dotenv import load_dotenv
 
@@ -27,24 +25,63 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 ALGORITHM = os.getenv("ALGORITHM")
 SECRET_KEY = os.getenv("SECRET_KEY")
 
+
 def verify_password(plain_password, hashed_password):
+    """
+    Verify if the plain password matches the hashed password.
+
+    Args:
+        plain_password (str): The plain text password to verify.
+        hashed_password (str): The hashed password to compare against.
+
+    Returns:
+        bool: True if the plain password matches the hashed password, False otherwise.
+    """
     return hashed_password == hashlib.sha256(plain_password.encode()).hexdigest()
 
 
 def get_password_hash(password):
+    """
+    Generate a hashed version of the password.
+
+    Args:
+        password (str): The password to hash.
+
+    Returns:
+        str: The hashed password.
+    """
     return pwd_context.hash(password)
 
 
 def get_user(useremail: str) -> User:
+    """
+    Retrieve user data from the database based on the email.
+
+    Args:
+        useremail (str): The email of the user to retrieve.
+
+    Returns:
+        User: The user object if found in the database, otherwise an empty user object.
+    """
     response = supabase_client.supabase.table("password_with_mail").select("mail", "password").eq("mail", useremail).execute()
     print(response)
     user_data = response.data[0]
     if user_data:
-        return User(useremail=user_data.get('mail'), password=user_data.get('password') )
+        return User(useremail=user_data.get('mail'), password=user_data.get('password'))
     return User(useremail="", password="")
 
 
 def authenticate_user(useremail: str, password: str):
+    """
+    Authenticate a user based on email and password.
+
+    Args:
+        useremail (str): The email of the user to authenticate.
+        password (str): The password to verify for the user.
+
+    Returns:
+        User: The user object if authentication is successful, False otherwise.
+    """
     user = get_user(useremail)
     if not user:
         return False
@@ -54,6 +91,16 @@ def authenticate_user(useremail: str, password: str):
 
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
+    """
+    Create an access token with the provided data.
+
+    Args:
+        data (dict): The data to encode into the token.
+        expires_delta (timedelta | None, optional): The expiration time delta for the token. Defaults to None.
+
+    Returns:
+        str: The encoded JWT access token.
+    """
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
@@ -64,7 +111,19 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     return encoded_jwt
 
 
-async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
+async def get_current_user(token: str):
+    """
+    Get the current user based on the provided JWT token.
+
+    Args:
+        token (str): The JWT token for authentication.
+
+    Returns:
+        User: The user object if authentication is successful.
+
+    Raises:
+        HTTPException: If the token is invalid or the user is not authenticated, raises HTTP 401 Unauthorized.
+    """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -120,15 +179,11 @@ class EmailService:
 
         try:
             smtp_server.login(self.sender_email, self.sender_password)
-
             verification_code = self.generate_verification_code()
             self.verification_codes[email] = verification_code
-
             message = MIMEMultipart()
             message['From'] = self.sender_email
             message['To'] = email
-
-
             body_with_code = f"Verification Code: {verification_code}"
             message.attach(MIMEText(body_with_code, 'plain'))
 

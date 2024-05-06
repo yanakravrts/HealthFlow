@@ -7,4 +7,3 @@ app.include_router(mailer.router)
 app.include_router(laboratories.router)
 app.include_router(file.router)
 app.include_router(homepages.router)
-

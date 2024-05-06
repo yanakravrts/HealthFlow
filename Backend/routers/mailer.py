@@ -62,7 +62,7 @@ async def check_email(
         if password:
             try:
                 hashed_password = hash_password(password)
-                response = supabase_client.supabase.table("password_with_mail").insert({"mail": email, "password": hashed_password}).execute()
+                supabase_client.supabase.table("password_with_mail").insert({"mail": email, "password": hashed_password}).execute()
                 return {"message": "Email and password have been added successfully"}
             except Exception as e:
                 return error.error_500(e, f"An error occurred when trying to add a user to the database: {str(e)}")
@@ -74,13 +74,25 @@ async def check_email(
 
 @router.post("/token", tags=["mailer"])
 async def login_for_access_token(
-    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
 ) -> Token:
+    """
+    Endpoint to authenticate users and generate access tokens.
+
+    Args:
+        form_data (OAuth2PasswordRequestForm): Form data containing useremail and password.
+
+    Returns:
+        Token: The generated access token.
+
+    Raises:
+        HTTPException: If the user authentication fails, raises HTTP 401 Unauthorized.
+    """
     user = authenticate_user(form_data.username, form_data.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect useremail or password",
+            detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
@@ -88,6 +100,7 @@ async def login_for_access_token(
         data={"sub": user.useremail}, expires_delta=access_token_expires
     )
     return Token(access_token=access_token, token_type="bearer")
+
 
 @router.post("/create_profile", tags=["mailer"])
 async def create_user(name: str = Query(..., description="User name"),
@@ -118,7 +131,7 @@ async def create_user(name: str = Query(..., description="User name"),
         return response
     except Exception as e:
         return error.error_500(e, f"An error occurred while trying to create a user: {str(e)}")
-    
+
 # @router.post("/login", tags=["mailer"])
 # async def login(email: str = Query(..., description="User email"),
 #                 password: str = Query(..., description="User password")):

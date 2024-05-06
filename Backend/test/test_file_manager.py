@@ -11,8 +11,6 @@ class TestExtractTableFromPDF(unittest.IsolatedAsyncioTestCase):
             ["Data1", "Data2", "Data3"],
             ["Data4", "Data5", "Data6"]
         ]
-        
-
         with unittest.mock.patch('pdfplumber.open') as mock_open:
             mock_page = MagicMock()
             mock_page.extract_table.return_value = expected_table
