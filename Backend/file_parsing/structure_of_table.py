@@ -3,9 +3,26 @@ from PIL import Image
 from detection_of_table import TableDetection
 from transformers import TableTransformerForObjectDetection, DetrFeatureExtractor
 import matplotlib.pyplot as plt
+import os
 
 class TableRecognition:
+    """
+    A class for recognizing the structure of tables in an image using Transformer-based object detection.
+
+    Attributes:
+        image_path (str): The path to the image file.
+        feature_extractor (DetrFeatureExtractor): The feature extractor model for image preprocessing.
+        model (TableTransformerForObjectDetection): The Transformer-based model for table structure recognition.
+        COLORS (list): A list of RGB colors for visualization.
+    """
+
     def __init__(self, image_path):
+        """
+        Initializes the TableRecognition object with the image path and loads the required models.
+
+        Args:
+            image_path (str): The path to the image file.
+        """
         self.image_path = image_path
         self.feature_extractor = DetrFeatureExtractor.from_pretrained("facebook/detr-resnet-50")
         self.model = TableTransformerForObjectDetection.from_pretrained("microsoft/table-transformer-structure-recognition")
@@ -13,6 +30,17 @@ class TableRecognition:
                        [0.494, 0.184, 0.556], [0.466, 0.674, 0.188], [0.301, 0.745, 0.933]]
 
     def plot_results(self, pil_img, scores, labels, boxes, rows=None, columns=None):
+        """
+        Plots the results of table structure recognition on the input image.
+
+        Args:
+            pil_img (PIL.Image.Image): The PIL image object.
+            scores (torch.Tensor): Confidence scores for each predicted box.
+            labels (torch.Tensor): Predicted class labels for each box.
+            boxes (torch.Tensor): Bounding boxes (xmin, ymin, xmax, ymax) for each box.
+            rows (list): List of tuples representing row coordinates.
+            columns (list): List of tuples representing column coordinates.
+        """
         plt.figure(figsize=(16,10))
         plt.imshow(pil_img)
         ax = plt.gca()
@@ -37,17 +65,24 @@ class TableRecognition:
         plt.show()
 
     def get_row_and_column_coordinates(self, boxes):
-        rows = []
-        columns = []
-        for box in boxes:
-            xmin, ymin, xmax, ymax = box
-            rows.append((ymin, ymax))
-            columns.append((xmin, xmax))
+        """
+        Extracts row and column coordinates from predicted bounding boxes.
+
+        Args:
+            boxes (torch.Tensor): Bounding boxes (xmin, ymin, xmax, ymax) for each box.
+
+        Returns:
+            rows (list): List of tuples representing row coordinates.
+            columns (list): List of tuples representing column coordinates.
+        """
         rows = [(box[1].detach().numpy(), box[3].detach().numpy()) for box in boxes]
         columns = [(box[0].detach().numpy(), box[2].detach().numpy()) for box in boxes]
         return rows, columns
 
     def recognize_table_structure(self):
+        """
+        Recognizes the structure of the table in the image and visualizes the results.
+        """
         print("Recognizing table structure...")
         image = Image.open(self.image_path)
         encoding = self.feature_extractor(image, return_tensors="pt")
@@ -62,10 +97,13 @@ class TableRecognition:
             print(f"Box {i + 1}: Row - {row}, Column - {column}")
 
 
-pdf_processor = TableDetection('Backend/file_parsing/womananalysis.pdf')
-
+file_path = '/Users/yanakravets/HealthFlow/Backend/file_parsing/womananalysis.pdf'
+pdf_processor = TableDetection(file_path)
 cropped_images = pdf_processor.process_pdf()
 
-for cropped_image_path in cropped_images:
-    table_recognition = TableRecognition(cropped_image_path)
+for image in cropped_images:
+    temp_image_path = "/Users/yanakravets/HealthFlow/Backend/file_parsing/temp_image.png"
+    image.save(temp_image_path)
+    table_recognition = TableRecognition(temp_image_path)
     table_recognition.recognize_table_structure()
+    os.remove(temp_image_path)
