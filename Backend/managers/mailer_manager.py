@@ -100,6 +100,9 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 
     Returns:
         str: The encoded JWT access token.
+
+    Notes:
+        The function also saves the token to a binary file named "token.bin".
     """
     to_encode = data.copy()
     if expires_delta:
@@ -108,6 +111,9 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
         expire = datetime.now(timezone.utc) + timedelta(minutes=15)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    token_bytes = encoded_jwt.encode('utf-8')  # Перетворення рядка токену у байтовий формат
+    with open("token.bin", 'wb') as file:
+        file.write(token_bytes)
     return encoded_jwt
 
 
@@ -130,6 +136,10 @@ async def get_current_user(token: str):
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
+        # Додаткова перевірка токенів
+        if not compare_tokens(token, "token.bin"):
+            raise credentials_exception
+
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         useremail: str = payload.get("sub")
         if useremail is None:
@@ -142,6 +152,15 @@ async def get_current_user(token: str):
         raise credentials_exception
     return user
 
+
+def compare_tokens(user_token: str, file_name: str) -> bool:
+    # Зчитуємо токен з бінарного файлу
+    with open(file_name, 'rb') as file:
+        stored_token_bytes = file.read()
+    stored_token = stored_token_bytes.decode('utf-8')  # Перетворюємо байтовий токен у рядок
+
+    # Порівнюємо токени
+    return user_token == stored_token
 
 class EmailService:
     def __init__(self):
