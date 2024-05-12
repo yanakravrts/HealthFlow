@@ -16,18 +16,11 @@ from fastapi.security import OAuth2PasswordBearer
 import os
 from dotenv import load_dotenv
 from jose import JWTError, jwt
-from fastapi import HTTPException, Depends
-from starlette.status import HTTP_401_UNAUTHORIZED
+from fastapi import HTTPException
+
 error = Error()
 load_dotenv()
 
-async def oauth2_scheme(token: str = Depends(OAuth2PasswordBearer(tokenUrl="token"))):
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-    except JWTError:
-        raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail="Invalid or expired token")
-
-    return token
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

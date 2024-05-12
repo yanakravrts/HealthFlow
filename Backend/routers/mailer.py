@@ -2,8 +2,8 @@ from fastapi import APIRouter, HTTPException, Query, status, Depends
 from pydantic import EmailStr
 from Backend.other.logger_file import logger
 from Backend.other.error import Error
-from Backend.other.models import Token
-from Backend.managers.mailer_manager import authenticate_user, EmailService, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, oauth2_scheme
+from Backend.other.models import Token, User
+from Backend.managers.mailer_manager import authenticate_user, EmailService, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, oauth2_scheme, get_current_user
 from Backend.base.supa_client import supabase_client
 from Backend.other.hashing_password import hash_password
 from datetime import datetime, timedelta, timezone
@@ -107,7 +107,7 @@ async def create_user(name: str = Query(..., description="User name"),
                       sex_id: int = Query(..., description="User sex ID"),
                       email: str = Query(..., description="User email"),
                       birth_day_timestamp: int = Query(..., description="User birth day as Unix timestamp"),
-                      token: str = Depends(oauth2_scheme)):
+                      current_user: User = Depends(get_current_user)):
     """
     Creates a user profile with the provided information.
 
