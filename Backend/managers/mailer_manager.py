@@ -15,9 +15,20 @@ from fastapi import HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 import os
 from dotenv import load_dotenv
-
+from jose import JWTError, jwt
+from fastapi import HTTPException, Depends
+from starlette.status import HTTP_401_UNAUTHORIZED
 error = Error()
 load_dotenv()
+
+async def oauth2_scheme(token: str = Depends(OAuth2PasswordBearer(tokenUrl="token"))):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    except JWTError:
+        raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail="Invalid or expired token")
+
+    return token
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -136,7 +147,6 @@ async def get_current_user(token: str):
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        # Додаткова перевірка токенів
         if not compare_tokens(token, "token.bin"):
             raise credentials_exception
 
@@ -154,13 +164,11 @@ async def get_current_user(token: str):
 
 
 def compare_tokens(user_token: str, file_name: str) -> bool:
-    # Зчитуємо токен з бінарного файлу
     with open(file_name, 'rb') as file:
         stored_token_bytes = file.read()
-    stored_token = stored_token_bytes.decode('utf-8')  # Перетворюємо байтовий токен у рядок
-
-    # Порівнюємо токени
+    stored_token = stored_token_bytes.decode('utf-8')
     return user_token == stored_token
+
 
 class EmailService:
     def __init__(self):
