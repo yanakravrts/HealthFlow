@@ -5,7 +5,8 @@ from Backend.other.error import Error
 from Backend.other.logger_file import logger
 from fastapi import Request, APIRouter, Depends
 from Backend.managers.file_manager import extract_table_from_pdf
-from Backend.managers.mailer_manager import oauth2_scheme
+from Backend.managers.mailer_manager import get_current_user
+from Backend.other.models import User
 
 
 # supabase = SupabaseDBClient(config=settings)
@@ -23,7 +24,7 @@ supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 
 @router.post("/upload/", tags=["file"])
-async def upload_file(request: Request, token: str = Depends(oauth2_scheme)):
+async def upload_file(request: Request, current_user: User = Depends(get_current_user)):
     """
     Handles the upload of a file to Supabase storage.
 
@@ -54,7 +55,7 @@ async def upload_file(request: Request, token: str = Depends(oauth2_scheme)):
 
 
 @router.get("/get_file/{file_name}", tags=["file"])
-async def get_file(file_name: str, token: str = Depends(oauth2_scheme)):
+async def get_file(file_name: str, current_user: User = Depends(get_current_user)):
     """
     Retrieves a file from Supabase storage and extracts text from a PDF file if available.
 
