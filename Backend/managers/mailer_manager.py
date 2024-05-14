@@ -25,7 +25,7 @@ load_dotenv()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 259200
 ALGORITHM = os.getenv("ALGORITHM")
 SECRET_KEY = os.getenv("SECRET_KEY")
 
