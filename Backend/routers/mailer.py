@@ -89,14 +89,12 @@ async def login_for_access_token(
         HTTPException: If the user authentication fails, raises HTTP 401 Unauthorized.
     """
     try:
-        # Перевірка чи дані мають правильний тип (рядок)
         if not isinstance(form_data.username, str) or not isinstance(form_data.password, str):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Invalid data format",
             )
 
-        # Перевірка формату електронної пошти
         if not re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', form_data.username):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
