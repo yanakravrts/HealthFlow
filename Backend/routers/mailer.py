@@ -9,7 +9,7 @@ from Backend.other.hashing_password import hash_password
 from datetime import datetime, timedelta, timezone
 from typing import Annotated
 from fastapi.security import OAuth2PasswordRequestForm
-
+import re
 
 router = APIRouter()
 error = Error()
@@ -88,18 +88,45 @@ async def login_for_access_token(
     Raises:
         HTTPException: If the user authentication fails, raises HTTP 401 Unauthorized.
     """
-    user = authenticate_user(form_data.username, form_data.password)
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"},
+    try:
+        # Перевірка чи дані мають правильний тип (рядок)
+        if not isinstance(form_data.username, str) or not isinstance(form_data.password, str):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid data format",
+            )
+
+        # Перевірка формату електронної пошти
+        if not re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', form_data.username):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid email format",
+            )
+
+        user = authenticate_user(form_data.username, form_data.password)
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Incorrect username or password",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        
+        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = create_access_token(
+            data={"sub": user.useremail}, expires_delta=access_token_expires
         )
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": user.useremail}, expires_delta=access_token_expires
-    )
-    return Token(access_token=access_token, token_type="bearer")
+        return Token(access_token=access_token, token_type="bearer")
+    
+    except HTTPException as http_exc:
+        logger.error(f"HTTP {http_exc.status_code}: {http_exc.detail}")
+        raise http_exc
+    
+    except Exception as exc:
+        logger.error(f"An unexpected error occurred: {exc}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An unexpected error occurred, please try again later",
+        )
 
 
 @router.post("/create_profile", tags=["mailer"])
