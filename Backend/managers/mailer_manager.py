@@ -115,7 +115,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
         expire = datetime.now(timezone.utc) + timedelta(minutes=15)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    token_bytes = encoded_jwt.encode('utf-8')  # Перетворення рядка токену у байтовий формат
+    token_bytes = encoded_jwt.encode('utf-8')  
     with open("token.bin", 'wb') as file:
         file.write(token_bytes)
     return encoded_jwt
