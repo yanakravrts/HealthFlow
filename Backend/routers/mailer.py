@@ -90,12 +90,14 @@ async def login_for_access_token(
     """
     try:
         if not isinstance(form_data.username, str) or not isinstance(form_data.password, str):
+            logger.error("Invalid data format: username and password must be strings")
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Invalid data format",
             )
 
         if not re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', form_data.username):
+            logger.error("Invalid email format: username must be a valid email address")
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Invalid email format",
