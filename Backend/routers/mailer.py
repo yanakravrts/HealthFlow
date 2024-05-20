@@ -3,7 +3,7 @@ from pydantic import EmailStr
 from Backend.other.logger_file import logger
 from Backend.other.error import Error
 from Backend.other.models import Token, User
-from Backend.managers.mailer_manager import authenticate_user, EmailService, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, oauth2_scheme, get_current_user
+from Backend.managers.mailer_manager import authenticate_user, EmailService, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_current_user
 from Backend.base.supa_client import supabase_client
 from Backend.other.hashing_password import hash_password
 from datetime import datetime, timedelta, timezone
@@ -110,17 +110,17 @@ async def login_for_access_token(
                 detail="Incorrect username or password",
                 headers={"WWW-Authenticate": "Bearer"},
             )
-        
+
         access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
         access_token = create_access_token(
             data={"sub": user.useremail}, expires_delta=access_token_expires
         )
         return Token(access_token=access_token, token_type="bearer")
-    
+
     except HTTPException as http_exc:
         logger.error(f"HTTP {http_exc.status_code}: {http_exc.detail}")
         raise http_exc
-    
+
     except Exception as exc:
         logger.error(f"An unexpected error occurred: {exc}")
         raise HTTPException(
