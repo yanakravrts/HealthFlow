@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'displays/homepage.dart';
+import 'homepage.dart';
+import 'verify_email.dart';
 
 void main() {
   runApp(const MyApp());
@@ -103,7 +104,7 @@ class LoginLabel extends StatelessWidget {
           children: [
             // Виведення контуру тексту
             Text(
-              'Login',
+              'Зареєструватись',
               style: TextStyle(
                 fontFamily: 'RobotoFlex',
                 fontSize: 30,
@@ -116,7 +117,7 @@ class LoginLabel extends StatelessWidget {
             ),
             // Фактичний текст
             Text(
-              'Login',
+              'Зареєструватись',
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.normal,
@@ -203,13 +204,16 @@ class RoundedRectangle extends StatelessWidget {
             right: 20,
             child: GestureDetector(
               onTap: () {
-                // Обробник подій для тексту "Click here to create one"
-                print('Navigate to account creation');
+                // Перехід на EmailVerificationPage при натисканні
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EmailVerificationPage()),
+                );
               },
               child: RichText(
                 textAlign: TextAlign.center,
                 text: TextSpan(
-                  text: "Don’t have an account? ",
+                  text: "Ще не маєте акаунту? ",
                   style: TextStyle(
                     fontFamily: 'RobotoFlex',
                     color: Color.fromRGBO(143, 142, 142, 1),
@@ -218,7 +222,7 @@ class RoundedRectangle extends StatelessWidget {
                   ),
                   children: [
                     TextSpan(
-                      text: "Click here to create one",
+                      text: "Натисніть тут щоб створити",
                       style: TextStyle(
                         decoration: TextDecoration.underline,
                         fontFamily: 'RobotoFlex',
@@ -235,6 +239,7 @@ class RoundedRectangle extends StatelessWidget {
     );
   }
 }
+
 
 class Wave extends StatelessWidget {
   final String imageUrl;
@@ -345,7 +350,7 @@ class LoginButton extends StatelessWidget {
         alignment: Alignment.center,
         height: 80,
         child: Text(
-          'Log in',
+          'Зареєструватись',
           style: TextStyle(color: Color.fromRGBO(255, 255, 255, 1)),
         ),
       ),
@@ -466,7 +471,7 @@ class _MyFormState extends State<MyForm> {
           left: 36,
           height: 60,
           width: 333,
-          child: FormInput(_passwordController, "Password"),
+          child: FormInput(_passwordController, "Пароль"),
         ),
         Positioned(
           top: 235,

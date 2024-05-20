@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -32,7 +31,6 @@ class ProfilePage extends StatelessWidget {
         ),
         child: Stack(
           children: [
-
             Positioned(
               top: 70,
               left: 124,
@@ -60,60 +58,25 @@ class ProfilePage extends StatelessWidget {
               child: LoginLabel(),
             ),
             Positioned(
-                top: 55,
-                left: -20,
-                child:TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
-                    );
-                    print('Back button clicked');
-
-                  }, // Image tapped
-                  child: Image.asset(
-                    'assets/back.png',
-                    fit: BoxFit.cover, // Fixes border issues
-                    width:320,
-                    height: 110,
-                  ),
-                )
-              // child: ElevatedButton.icon(
-              //   onPressed: () {
-              //
-              //   },
-              //
-              //   icon: Image.asset('assets/back.png'),
-              //   label: Text(""),
-              // ),
+              top: 55,
+              left: -20,
+              child: TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  print('Back button clicked');
+                },
+                child: Image.asset(
+                  'assets/back.png',
+                  fit: BoxFit.cover,
+                  width: 320,
+                  height: 110,
+                ),
+              ),
             ),
           ],
         ),
       ),
     );
-  }
-}
-
-Future<void> sendRequest(BuildContext context) async {
-  try {
-    final url = Uri.parse('https://jsonplaceholder.typicode.com/posts');
-    final response = await http.post(
-      url,
-      body: {
-        'title': 'foo',
-        'body': 'bar',
-        'userId': '1',
-      },
-    );
-
-    if (response.statusCode == 201) {
-      final Map<String, dynamic> data = json.decode(response.body);
-      print('Post request successful: $data');
-    } else {
-      print('Post request failed with status: ${response.statusCode}');
-    }
-  } catch (e) {
-    print('Error sending request: $e');
   }
 }
 
@@ -129,7 +92,7 @@ class LoginLabel extends StatelessWidget {
         child: Stack(
           children: [
             Text(
-              'My Profile',
+              'Мій профіль',
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.normal,
@@ -180,7 +143,6 @@ class RoundedRectangle extends StatelessWidget {
       child: Stack(
         children: [
           Positioned(height: 700, width: 680, child: MyForm()),
-
         ],
       ),
     );
@@ -215,43 +177,44 @@ class FormInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        clipBehavior: Clip.hardEdge,
-        width: 358,
-        height: 80,
-        margin: const EdgeInsets.only(left: 10, top: 2),
-        decoration: BoxDecoration(
-          color: Color.fromRGBO( 200, 200, 200,1),
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Stack(children: [
-          TextFormField(
-            controller: _controller,
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.symmetric(vertical: 13, horizontal: 20),
-              hintText: _placeholder,
-              border: InputBorder.none,
-            ),
-            style: TextStyle(
-              color: Color.fromRGBO(128, 128, 128, 1),
-              fontFamily: 'Inter',
-              fontSize: 23,
-            ),
-            validator: (value) {
-              if (isEmail) {
-                final emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-                if (!emailRegExp.hasMatch(value ?? '')) {
-                  return 'Enter a valid email';
-                }
-              }
-              return null;
-            },
-            onTap: () {
-              if (isDateOfBirth) {
-                _selectDate(context);
-              }
-            },
+      clipBehavior: Clip.hardEdge,
+      width: 358,
+      height: 80,
+      margin: const EdgeInsets.only(left: 10, top: 2),
+      decoration: BoxDecoration(
+        color: Color.fromRGBO(200, 200, 200, 1),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Stack(children: [
+        TextFormField(
+          controller: _controller,
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(vertical: 13, horizontal: 20),
+            hintText: _placeholder,
+            border: InputBorder.none,
           ),
-        ]));
+          style: TextStyle(
+            color: Color.fromRGBO(128, 128, 128, 1),
+            fontFamily: 'Inter',
+            fontSize: 23,
+          ),
+          validator: (value) {
+            if (isEmail) {
+              final emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+              if (!emailRegExp.hasMatch(value ?? '')) {
+                return 'Enter a valid email';
+              }
+            }
+            return null;
+          },
+          onTap: () {
+            if (isDateOfBirth) {
+              _selectDate(context);
+            }
+          },
+        ),
+      ]),
+    );
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -263,6 +226,25 @@ class FormInput extends StatelessWidget {
     if (pickedDate != null) {
       _controller.text = DateFormat('yyyy-MM-dd').format(pickedDate);
     }
+  }
+}
+
+class LoginPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: LoginButton(
+          // Передаємо функцію для переходу на сторінку HomePage
+              () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
+          },
+        ),
+      ),
+    );
   }
 }
 
@@ -294,7 +276,7 @@ class LoginButton extends StatelessWidget {
         alignment: Alignment.center,
         height: 80,
         child: Text(
-          'Edit',
+          'Змінити',
           style: TextStyle(color: Color.fromRGBO(0, 0, 0, 1)),
         ),
       ),
@@ -345,14 +327,14 @@ class _MyFormState extends State<MyForm> {
           left: 18,
           height: 70,
           width: 370,
-          child: FormInput(_nameController, "Name"),
+          child: FormInput(_nameController, "Імʼя"),
         ),
         Positioned(
           top: 160,
           left: 18,
           height: 70,
           width: 370,
-          child: FormInput(_dataController, "Date of birth", isDateOfBirth: true),
+          child: FormInput(_dataController, "Дата народження", isDateOfBirth: true),
         ),
         Positioned(
           top: 250,

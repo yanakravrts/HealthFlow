@@ -1,18 +1,19 @@
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Query, Depends
 from fastapi.responses import JSONResponse, RedirectResponse
 from typing import List
 from Backend.other.logger_file import logger
 from Backend.other.error import Error
-from Backend.other.models import Article, HelpResponse, AboutAs, ProfileName, BloodDonationCentersResponse
+from Backend.other.models import Article, HelpResponse, AboutAs, ProfileName, BloodDonationCentersResponse, User
 from Backend.base.supa_client import supabase_client
 from datetime import datetime, timezone
+from Backend.managers.mailer_manager import get_current_user
 
 router = APIRouter()
 error = Error()
 
 
 @router.get("/burger", response_model=ProfileName, tags=["homepages"])
-async def burger(profile_id: str):
+async def burger(profile_id: str, current_user: User = Depends(get_current_user)):
     """
     Retrieves the username of a profile from the database based on the provided profile ID.
 
@@ -39,7 +40,8 @@ async def update_user_profile(user_id: int = Query(..., description="User ID"),
                               name: str = Query(None, description="User name"),
                               sex_id: int = Query(None, description="User sex ID"),
                               email: str = Query(None, description="User email"),
-                              birth_day_timestamp: int = Query(None, description="User birth day as Unix timestamp")):
+                              birth_day_timestamp: int = Query(None, description="User birth day as Unix timestamp"),
+                              current_user: User = Depends(get_current_user)):
     """
     Updates the user profile with the provided information.
 
@@ -72,7 +74,8 @@ async def update_user_profile(user_id: int = Query(..., description="User ID"),
 
 
 @router.get("/burger/help", response_model=HelpResponse, tags=["homepages"])
-async def help(question: str = Query(..., title="Your Question", description="Please enter your question here")):
+async def help(question: str = Query(..., title="Your Question", description="Please enter your question here"),
+               current_user: User = Depends(get_current_user)):
     """
     Accepts a question from the user.
 
@@ -93,7 +96,8 @@ async def help(question: str = Query(..., title="Your Question", description="Pl
 
 
 @router.get("/burger/blood_donation_centers/", response_model=BloodDonationCentersResponse, tags=["homepages"])
-async def get_blood_donation_centers(blood_group: str = Query(..., title="Blood Group", description="Enter your blood group")):
+async def get_blood_donation_centers(blood_group: str = Query(..., title="Blood Group", description="Enter your blood group"),
+                                     current_user: User = Depends(get_current_user)):
     try:
         blood_group = blood_group.upper()
         logger.debug(f"Search for {blood_group} blood group")
@@ -117,7 +121,7 @@ async def get_blood_donation_centers(blood_group: str = Query(..., title="Blood 
 
 
 @router.get("/burger/AboutAS", response_model=AboutAs, tags=["homepages"])
-async def about_as():
+async def about_as(current_user: User = Depends(get_current_user)):
     """
     Retrieves information about the HealthFlow app and its creators.
 
@@ -134,7 +138,7 @@ async def about_as():
 
 
 @router.get("/", response_model=List[Article], tags=["homepages"])
-async def home():
+async def home(current_user: User = Depends(get_current_user)):
     """
     Retrieves a list of recent articles for the homepage.
 
@@ -143,14 +147,14 @@ async def home():
     """
     try:
         num_articles = 2
-        response = supabase_client.supabase.table("article").select("id", "title", "photo", "link", "timestamp").execute()
+        response = supabase_client.supabase.table("article").select("id", "title", "photo", "link", "timestamp", "text").execute()
         articles_data = response.data
         if articles_data:
             sorted_articles = sorted(articles_data, key=lambda x: x["timestamp"], reverse=True)
             selected_articles = sorted_articles[:num_articles]
             articles = []
             for article in selected_articles:
-                articles.append(Article(title=article["title"], image=article["photo"]))
+                articles.append(Article(title=article["title"], image=article["photo"], text=article["text"]))
             return articles
         else:
             return error.error_404("Not enough articles available")
@@ -159,7 +163,7 @@ async def home():
 
 
 @router.get("/article/{article_id}", tags=["homepages"])
-def read_article(article_id: int):
+def read_article(article_id: int, current_user: User = Depends(get_current_user)):
     """
     Retrieves details of a specific article based on its ID.
 
@@ -186,7 +190,7 @@ def read_article(article_id: int):
 
 
 @router.get("/article/go_to_external_link/{article_id}", tags=["homepages"])
-async def go_to_external_link(article_id: int):
+async def go_to_external_link(article_id: int, current_user: User = Depends(get_current_user)):
     """
     Redirects the user to an external link associated with a specific article based on its ID.
 

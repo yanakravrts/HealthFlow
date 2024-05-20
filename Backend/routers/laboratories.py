@@ -1,11 +1,12 @@
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Query, Depends
 import json
 from time import time
 from Backend.managers.geo_manager import points_in_radius
 from Backend.base.supa_client import supabase_client
-from Backend.other.models import Point
+from Backend.other.models import Point, User
 from Backend.other.error import Error
 from datetime import datetime, timezone
+from Backend.managers.mailer_manager import get_current_user
 
 
 error = Error()
@@ -16,7 +17,8 @@ router = APIRouter()
 async def add_event(region: str = Query(..., description="Name of the region"),
                     center_lat: float = Query(..., description="Latitude of the center point"),
                     center_lon: float = Query(..., description="Longitude of the center point"),
-                    radius: float = Query(..., description="Radius in kilometers")):
+                    radius: float = Query(..., description="Radius in kilometers"),
+                    current_user: User = Depends(get_current_user)):
     """
 Endpoint: /laboratories
 
@@ -61,7 +63,8 @@ Returns:
 async def create_user_visit(user_id: int = Query(..., description="User ID"),
                             status_id: int = Query(..., description="Status ID"),
                             timestamp: int = Query(..., description="Timestamp"),
-                            facility_id: str = Query(..., description="Facility ID")):
+                            facility_id: str = Query(..., description="Facility ID"),
+                            current_user: User = Depends(get_current_user)):
     """
     Creates a user visit record with the provided information.
 
@@ -88,7 +91,8 @@ async def create_user_visit(user_id: int = Query(..., description="User ID"),
 
 
 @router.post("/user_visits", tags=["laboratories"])
-async def user_visits(user_id: int = Query(..., description="User ID")):
+async def user_visits(user_id: int = Query(..., description="User ID"),
+                      current_user: User = Depends(get_current_user)):
     """
     Retrieves user visits from the database.
 

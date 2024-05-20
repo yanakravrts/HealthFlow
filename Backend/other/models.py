@@ -34,6 +34,7 @@ class Profile(BaseModel):
 class Article(BaseModel):
     title: str
     image: HttpUrl
+    text: str
 
 
 class HelpResponse(BaseModel):
@@ -70,8 +71,15 @@ class EmailSchema(BaseModel):
     body: str
 
 
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    useremail: str | None = None
+
+
 class User(BaseModel):
-    name: str
-    sex_id: int
-    email: EmailStr
-    birth_day: str
+    useremail: str
+    password: str
