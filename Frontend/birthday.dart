@@ -46,14 +46,14 @@ class _BirthdayPageState extends State<BirthdayPage> {
               ),
             ),
             const SizedBox(height: 60),
-            const Text(
-              'Дата народження',
-              style: TextStyle(
-                color: Color(0xFFF5F5F5),
-                fontWeight: FontWeight.bold,
-                fontSize: 24,
-              ),
-            ),
+            // const Text(
+            //   'Дата народження',
+            //   style: TextStyle(
+            //     color: Color(0xFFF5F5F5),
+            //     fontWeight: FontWeight.bold,
+            //     fontSize: 24,
+            //   ),
+            // ),
             const SizedBox(height: 30),
             Container(
               height: 100,
